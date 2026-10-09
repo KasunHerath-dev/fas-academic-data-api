@@ -1,0 +1,17 @@
+[project]
+name = "fas-academic-data-api"
+version = "0.1.0"
+description = "FAS WUSL Academic Data API"
+authors = []
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+    "parser/tests"
+]
+pythonpath = [
+    ".",
+    "parser/src"
+]

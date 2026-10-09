@@ -1,0 +1,1619 @@
+{
+  "datasetVersion": "1.0",
+  "source": {
+    "file": "Level-23.pdf",
+    "sha256": "0e872ee45891554f337d5906e1a53998b05e6cddfe55660048164bb22cffa957"
+  },
+  "verification": {
+    "status": "partially_verified",
+    "verifiedBy": "manual review",
+    "verifiedSessionCount": 13,
+    "uncertainSessionCount": 14
+  },
+  "sessions": [
+    {
+      "day": "Monday",
+      "startTime": "01:30",
+      "endTime": "03:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2123",
+      "rawModuleCode": "CMIS 2123",
+      "classType": "P",
+      "rawClassType": "(P)",
+      "group": null,
+      "rawGroup": "Gp. l",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [
+        "Possible OCR ambiguity in group: Gp. l"
+      ],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2123",
+          "x": 176.73414611816406,
+          "y": 548.3499755859375
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "CMIS 2123",
+              "x": 176.73414611816406,
+              "y": 548.3499755859375
+            }
+          },
+          {
+            "module": {
+              "text": "CMIS 2123",
+              "x": 176.73414611816406,
+              "y": 617.8599853515625
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": false,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 50,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Monday",
+          "startTime": "01:30",
+          "endTime": "02:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Monday",
+          "startTime": "02:30",
+          "endTime": "03:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Monday",
+      "startTime": "01:30",
+      "endTime": "03:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "IMGT 2122",
+      "rawModuleCode": "IMGT 2122",
+      "classType": "L",
+      "rawClassType": "(L)",
+      "group": null,
+      "rawGroup": null,
+      "room": "LR-07",
+      "rawRoom": "LR- 07",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "IMGT 2122",
+          "x": 177.64638900756836,
+          "y": 575.260009765625
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "IMGT 2122",
+              "x": 177.64638900756836,
+              "y": 575.260009765625
+            }
+          },
+          {
+            "module": {
+              "text": "IMGT 2122",
+              "x": 177.64638900756836,
+              "y": 644.6199951171875
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Monday",
+          "startTime": "01:30",
+          "endTime": "02:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Monday",
+          "startTime": "02:30",
+          "endTime": "03:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Monday",
+      "startTime": "03:30",
+      "endTime": "04:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2123",
+      "rawModuleCode": "CMIS 2123",
+      "classType": "T",
+      "rawClassType": "(T)",
+      "group": null,
+      "rawGroup": null,
+      "room": null,
+      "rawRoom": null,
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2123",
+          "x": 176.85415649414062,
+          "y": 692.739990234375
+        }
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 60,
+      "durationMinutes": 60,
+      "sourceCells": [
+        {
+          "day": "Monday",
+          "startTime": "03:30",
+          "endTime": "04:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Monday",
+      "startTime": "08:30",
+      "endTime": "10:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2113",
+      "rawModuleCode": "CMIS 2113",
+      "classType": "L",
+      "rawClassType": "(L)",
+      "group": null,
+      "rawGroup": null,
+      "room": "MH",
+      "rawRoom": "MH",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2113",
+          "x": 177.2141571044922,
+          "y": 245.32996368408203
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "CMIS 2113",
+              "x": 177.2141571044922,
+              "y": 245.32996368408203
+            }
+          },
+          {
+            "module": {
+              "text": "CMIS 2113",
+              "x": 177.2141571044922,
+              "y": 308.32997131347656
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Monday",
+          "startTime": "08:30",
+          "endTime": "09:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Monday",
+          "startTime": "09:30",
+          "endTime": "10:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Monday",
+      "startTime": "10:30",
+      "endTime": "12:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2123",
+      "rawModuleCode": "CMIS 2123",
+      "classType": "L",
+      "rawClassType": "(L)",
+      "group": null,
+      "rawGroup": null,
+      "room": "MH",
+      "rawRoom": "MH",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2123",
+          "x": 177.2141571044922,
+          "y": 382.36997985839844
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "CMIS 2123",
+              "x": 177.2141571044922,
+              "y": 382.36997985839844
+            }
+          },
+          {
+            "module": {
+              "text": "CMIS 2123",
+              "x": 177.2141571044922,
+              "y": 460.86997985839844
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Monday",
+          "startTime": "10:30",
+          "endTime": "11:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Monday",
+          "startTime": "11:30",
+          "endTime": "12:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Tuesday",
+      "startTime": "01:30",
+      "endTime": "03:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "MATH 2114",
+      "rawModuleCode": "MATH 2114",
+      "classType": "L",
+      "rawClassType": "(L)",
+      "group": null,
+      "rawGroup": null,
+      "room": "MH",
+      "rawRoom": "MH",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "MATH 2114",
+          "x": 262.0294380187988,
+          "y": 561.7899780273438
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "MATH 2114",
+              "x": 262.0294380187988,
+              "y": 561.7899780273438
+            }
+          },
+          {
+            "module": {
+              "text": "MATH 2114",
+              "x": 262.0294380187988,
+              "y": 631.2999877929688
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Tuesday",
+          "startTime": "01:30",
+          "endTime": "02:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Tuesday",
+          "startTime": "02:30",
+          "endTime": "03:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Tuesday",
+      "startTime": "03:30",
+      "endTime": "04:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "STAT 2112",
+      "rawModuleCode": "STAT 2112",
+      "classType": "T",
+      "rawClassType": "(T)",
+      "group": null,
+      "rawGroup": null,
+      "room": "MH",
+      "rawRoom": "MH",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "STAT 2112",
+          "x": 260.1555404663086,
+          "y": 699.4599609375
+        }
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 60,
+      "sourceCells": [
+        {
+          "day": "Tuesday",
+          "startTime": "03:30",
+          "endTime": "04:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Tuesday",
+      "startTime": "08:30",
+      "endTime": "10:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2113",
+      "rawModuleCode": "CMIS 2113",
+      "classType": "P",
+      "rawClassType": "(P)",
+      "group": null,
+      "rawGroup": "Gp. IIl",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [
+        "Possible OCR ambiguity in group: Gp. IIl"
+      ],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2113",
+          "x": 260.2841567993164,
+          "y": 245.32996368408203
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "CMIS 2113",
+              "x": 260.2841567993164,
+              "y": 245.32996368408203
+            }
+          },
+          {
+            "module": {
+              "text": "CMIS 2113",
+              "x": 260.2841567993164,
+              "y": 308.32997131347656
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": false,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 50,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Tuesday",
+          "startTime": "08:30",
+          "endTime": "09:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Tuesday",
+          "startTime": "09:30",
+          "endTime": "10:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Tuesday",
+      "startTime": "10:30",
+      "endTime": "12:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "IMGT 2112",
+      "rawModuleCode": "IMGT 2112",
+      "classType": "L",
+      "rawClassType": "(L)",
+      "group": null,
+      "rawGroup": null,
+      "room": "LR-07",
+      "rawRoom": "LR- 07",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "IMGT 2112",
+          "x": 261.19640350341797,
+          "y": 382.36997985839844
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "IMGT 2112",
+              "x": 261.19640350341797,
+              "y": 382.36997985839844
+            }
+          },
+          {
+            "module": {
+              "text": "IMGT 2112",
+              "x": 261.19640350341797,
+              "y": 460.86997985839844
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Tuesday",
+          "startTime": "10:30",
+          "endTime": "11:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Tuesday",
+          "startTime": "11:30",
+          "endTime": "12:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Wednesday",
+      "startTime": "01:30",
+      "endTime": "03:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2113",
+      "rawModuleCode": "CMIS 2113",
+      "classType": "P",
+      "rawClassType": "(P)",
+      "group": null,
+      "rawGroup": "Gp. ll",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [
+        "Possible OCR ambiguity in group: Gp. ll"
+      ],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2113",
+          "x": 346.34415435791016,
+          "y": 568.510009765625
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "CMIS 2113",
+              "x": 346.34415435791016,
+              "y": 568.510009765625
+            }
+          },
+          {
+            "module": {
+              "text": "CMIS 2113",
+              "x": 346.34415435791016,
+              "y": 637.8999633789062
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": false,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 50,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Wednesday",
+          "startTime": "01:30",
+          "endTime": "02:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Wednesday",
+          "startTime": "02:30",
+          "endTime": "03:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Wednesday",
+      "startTime": "01:30",
+      "endTime": "03:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "ELTN 2121",
+      "rawModuleCode": "ELTN 2121",
+      "classType": "P",
+      "rawClassType": "(P)",
+      "group": null,
+      "rawGroup": "Gp. ll",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [
+        "Possible OCR ambiguity in group: Gp. ll"
+      ],
+      "rawEvidence": {
+        "module": {
+          "text": "ELTN 2121",
+          "x": 346.2239227294922,
+          "y": 541.6300048828125
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "ELTN 2121",
+              "x": 346.2239227294922,
+              "y": 541.6300048828125
+            }
+          },
+          {
+            "module": {
+              "text": "ELTN 2121",
+              "x": 346.2239227294922,
+              "y": 611.1399536132812
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": false,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 50,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Wednesday",
+          "startTime": "01:30",
+          "endTime": "02:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Wednesday",
+          "startTime": "02:30",
+          "endTime": "03:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Wednesday",
+      "startTime": "03:30",
+      "endTime": "04:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "ELTN 2112",
+      "rawModuleCode": "ELTN 2112",
+      "classType": "T",
+      "rawClassType": "(T)",
+      "group": null,
+      "rawGroup": null,
+      "room": "LR-08",
+      "rawRoom": "LR- 08",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "ELTN 2112",
+          "x": 346.3439178466797,
+          "y": 680.5
+        }
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 60,
+      "sourceCells": [
+        {
+          "day": "Wednesday",
+          "startTime": "03:30",
+          "endTime": "04:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Wednesday",
+      "startTime": "03:30",
+      "endTime": "04:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "IMGT 2132",
+      "rawModuleCode": "IMGT 2132",
+      "classType": "T",
+      "rawClassType": "(T)",
+      "group": "I",
+      "rawGroup": "Gp. I",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "IMGT 2132",
+          "x": 346.7764129638672,
+          "y": 707.3800048828125
+        }
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": true,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 75,
+      "durationMinutes": 60,
+      "sourceCells": [
+        {
+          "day": "Wednesday",
+          "startTime": "03:30",
+          "endTime": "04:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Wednesday",
+      "startTime": "07:30",
+      "endTime": "08:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "MATH 2114",
+      "rawModuleCode": "MATH 2114",
+      "classType": "T",
+      "rawClassType": "(T)",
+      "group": null,
+      "rawGroup": null,
+      "room": "MH",
+      "rawRoom": "MH",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "MATH 2114",
+          "x": 347.7294464111328,
+          "y": 200.18000030517578
+        }
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 60,
+      "sourceCells": [
+        {
+          "day": "Wednesday",
+          "startTime": "07:30",
+          "endTime": "08:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Wednesday",
+      "startTime": "08:30",
+      "endTime": "10:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "STAT 2112",
+      "rawModuleCode": "STAT 2112",
+      "classType": "L",
+      "rawClassType": "(L)",
+      "group": null,
+      "rawGroup": null,
+      "room": "MH",
+      "rawRoom": "MH",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "STAT 2112",
+          "x": 346.57552337646484,
+          "y": 245.32996368408203
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "STAT 2112",
+              "x": 346.57552337646484,
+              "y": 245.32996368408203
+            }
+          },
+          {
+            "module": {
+              "text": "STAT 2112",
+              "x": 346.57552337646484,
+              "y": 308.32997131347656
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Wednesday",
+          "startTime": "08:30",
+          "endTime": "09:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Wednesday",
+          "startTime": "09:30",
+          "endTime": "10:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Wednesday",
+      "startTime": "10:30",
+      "endTime": "12:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2123",
+      "rawModuleCode": "CMIS 2123",
+      "classType": "P",
+      "rawClassType": "(P)",
+      "group": null,
+      "rawGroup": "Gp. ll",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [
+        "Possible OCR ambiguity in group: Gp. ll"
+      ],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2123",
+          "x": 346.34415435791016,
+          "y": 398.20997619628906
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "CMIS 2123",
+              "x": 346.34415435791016,
+              "y": 398.20997619628906
+            }
+          },
+          {
+            "module": {
+              "text": "CMIS 2123",
+              "x": 346.34415435791016,
+              "y": 476.11000061035156
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": false,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 50,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Wednesday",
+          "startTime": "10:30",
+          "endTime": "11:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Wednesday",
+          "startTime": "11:30",
+          "endTime": "12:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Wednesday",
+      "startTime": "10:30",
+      "endTime": "12:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "ELTN 2121",
+      "rawModuleCode": "ELTN 2121",
+      "classType": "P",
+      "rawClassType": "(P)",
+      "group": null,
+      "rawGroup": "Gp. l",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [
+        "Possible OCR ambiguity in group: Gp. l"
+      ],
+      "rawEvidence": {
+        "module": {
+          "text": "ELTN 2121",
+          "x": 346.2239227294922,
+          "y": 371.3300018310547
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "ELTN 2121",
+              "x": 346.2239227294922,
+              "y": 371.3300018310547
+            }
+          },
+          {
+            "module": {
+              "text": "ELTN 2121",
+              "x": 346.2239227294922,
+              "y": 449.34999084472656
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": false,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 50,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Wednesday",
+          "startTime": "10:30",
+          "endTime": "11:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Wednesday",
+          "startTime": "11:30",
+          "endTime": "12:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Thursday",
+      "startTime": "01:30",
+      "endTime": "03:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2113",
+      "rawModuleCode": "CMIS 2113",
+      "classType": "P",
+      "rawClassType": "(P)",
+      "group": "I",
+      "rawGroup": "Gp. I",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2113",
+          "x": 431.7841567993164,
+          "y": 541.6300048828125
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "CMIS 2113",
+              "x": 431.7841567993164,
+              "y": 541.6300048828125
+            }
+          },
+          {
+            "module": {
+              "text": "CMIS 2113",
+              "x": 431.7841567993164,
+              "y": 611.1399536132812
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": true,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 75,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Thursday",
+          "startTime": "01:30",
+          "endTime": "02:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Thursday",
+          "startTime": "02:30",
+          "endTime": "03:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Thursday",
+      "startTime": "01:30",
+      "endTime": "02:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "IMGT 2112",
+      "rawModuleCode": "IMGT 2112",
+      "classType": "T",
+      "rawClassType": "(T)",
+      "group": "I",
+      "rawGroup": "Gp. I",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "IMGT 2112",
+          "x": 432.33641052246094,
+          "y": 568.510009765625
+        }
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": true,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 75,
+      "durationMinutes": 60,
+      "sourceCells": [
+        {
+          "day": "Thursday",
+          "startTime": "01:30",
+          "endTime": "02:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Thursday",
+      "startTime": "02:30",
+      "endTime": "03:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "IMGT 2122",
+      "rawModuleCode": "IMGT 2122",
+      "classType": "T",
+      "rawClassType": "(T)",
+      "group": "I",
+      "rawGroup": "Gp. I",
+      "room": "LR-07",
+      "rawRoom": "LR- 07",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "IMGT 2122",
+          "x": 432.33641052246094,
+          "y": 637.8999633789062
+        }
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 100,
+      "durationMinutes": 60,
+      "sourceCells": [
+        {
+          "day": "Thursday",
+          "startTime": "02:30",
+          "endTime": "03:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Thursday",
+      "startTime": "03:30",
+      "endTime": "05:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2123",
+      "rawModuleCode": "CMIS 2123",
+      "classType": "P",
+      "rawClassType": "(P)",
+      "group": null,
+      "rawGroup": "Gp. lV",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [
+        "Possible OCR ambiguity in group: Gp. lV"
+      ],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2123",
+          "x": 431.7841567993164,
+          "y": 699.4599609375
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "CMIS 2123",
+              "x": 431.7841567993164,
+              "y": 699.4599609375
+            }
+          },
+          {
+            "module": {
+              "text": "CMIS 2123",
+              "x": 431.7841567993164,
+              "y": 760.9199829101562
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": false,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 50,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Thursday",
+          "startTime": "03:30",
+          "endTime": "04:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Thursday",
+          "startTime": "04:30",
+          "endTime": "05:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Thursday",
+      "startTime": "08:30",
+      "endTime": "10:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2123",
+      "rawModuleCode": "CMIS 2123",
+      "classType": "P",
+      "rawClassType": "(P)",
+      "group": null,
+      "rawGroup": "Gp. IIl",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [
+        "Possible OCR ambiguity in group: Gp. IIl"
+      ],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2123",
+          "x": 431.7841567993164,
+          "y": 245.32996368408203
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "CMIS 2123",
+              "x": 431.7841567993164,
+              "y": 245.32996368408203
+            }
+          },
+          {
+            "module": {
+              "text": "CMIS 2123",
+              "x": 431.7841567993164,
+              "y": 305.9300079345703
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": false,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 50,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Thursday",
+          "startTime": "08:30",
+          "endTime": "09:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Thursday",
+          "startTime": "09:30",
+          "endTime": "10:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Thursday",
+      "startTime": "10:30",
+      "endTime": "12:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "ELTN 2112",
+      "rawModuleCode": "ELTN 2112",
+      "classType": "L",
+      "rawClassType": "(L)",
+      "group": null,
+      "rawGroup": null,
+      "room": "LR-08",
+      "rawRoom": "LR- 08",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "ELTN 2112",
+          "x": 432.14390563964844,
+          "y": 368.9299774169922
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "ELTN 2112",
+              "x": 432.14390563964844,
+              "y": 368.9299774169922
+            }
+          },
+          {
+            "module": {
+              "text": "ELTN 2112",
+              "x": 432.14390563964844,
+              "y": 447.4299774169922
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Thursday",
+          "startTime": "10:30",
+          "endTime": "11:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Thursday",
+          "startTime": "11:30",
+          "endTime": "12:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Thursday",
+      "startTime": "10:30",
+      "endTime": "12:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "IMGT 2132",
+      "rawModuleCode": "IMGT 2132",
+      "classType": "L",
+      "rawClassType": "(L)",
+      "group": null,
+      "rawGroup": null,
+      "room": "LR-07",
+      "rawRoom": "LR- 07",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "IMGT 2132",
+          "x": 432.69640350341797,
+          "y": 395.8099822998047
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "IMGT 2132",
+              "x": 432.69640350341797,
+              "y": 395.8099822998047
+            }
+          },
+          {
+            "module": {
+              "text": "IMGT 2132",
+              "x": 432.69640350341797,
+              "y": 474.3099822998047
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Thursday",
+          "startTime": "10:30",
+          "endTime": "11:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Thursday",
+          "startTime": "11:30",
+          "endTime": "12:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    },
+    {
+      "day": "Friday",
+      "startTime": "01:30",
+      "endTime": "02:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "CMIS 2113",
+      "rawModuleCode": "CMIS 2113",
+      "classType": "P",
+      "rawClassType": "(P)",
+      "group": null,
+      "rawGroup": "Gp. lV",
+      "room": null,
+      "rawRoom": null,
+      "warnings": [
+        "Possible OCR ambiguity in group: Gp. lV"
+      ],
+      "rawEvidence": {
+        "module": {
+          "text": "CMIS 2113",
+          "x": 517.3741912841797,
+          "y": 556.989990234375
+        }
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "group": false,
+        "room": false,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 50,
+      "durationMinutes": 60,
+      "sourceCells": [
+        {
+          "day": "Friday",
+          "startTime": "01:30",
+          "endTime": "02:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Friday",
+      "startTime": "08:30",
+      "endTime": "10:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": null,
+      "rawModuleCode": "ELPC 2+20",
+      "classType": null,
+      "rawClassType": null,
+      "group": null,
+      "rawGroup": null,
+      "room": "LR 01/02/03",
+      "rawRoom": "LR 01/02/03",
+      "warnings": [
+        "Suspicious module code: ELPC 2+20"
+      ],
+      "rawEvidence": {
+        "module": {
+          "text": "ELPC 2+20",
+          "x": 524.4701614379883,
+          "y": 247.84998321533203
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "ELPC 2+20",
+              "x": 524.4701614379883,
+              "y": 247.84998321533203
+            }
+          },
+          {
+            "module": {
+              "text": "ELPC 2+20",
+              "x": 524.4701614379883,
+              "y": 304.1299591064453
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": false,
+        "classType": false,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 5,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Friday",
+          "startTime": "08:30",
+          "endTime": "09:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Friday",
+          "startTime": "09:30",
+          "endTime": "10:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "uncertain"
+    },
+    {
+      "day": "Friday",
+      "startTime": "10:30",
+      "endTime": "12:30",
+      "timeSource": "explicit",
+      "timeInferenceReason": null,
+      "moduleCode": "MATH 2114",
+      "rawModuleCode": "MATH 2114",
+      "classType": "L",
+      "rawClassType": "(L)",
+      "group": null,
+      "rawGroup": null,
+      "room": "LR-09",
+      "rawRoom": "LR- 09",
+      "warnings": [],
+      "rawEvidence": {
+        "module": {
+          "text": "MATH 2114",
+          "x": 519.1194763183594,
+          "y": 382.36997985839844
+        },
+        "mergedFrom": [
+          {
+            "module": {
+              "text": "MATH 2114",
+              "x": 519.1194763183594,
+              "y": 382.36997985839844
+            }
+          },
+          {
+            "module": {
+              "text": "MATH 2114",
+              "x": 519.1194763183594,
+              "y": 460.86997985839844
+            }
+          }
+        ]
+      },
+      "validation": {
+        "moduleCode": true,
+        "classType": true,
+        "room": true,
+        "duration": true,
+        "timeValid": true
+      },
+      "confidence": 85,
+      "durationMinutes": 120,
+      "sourceCells": [
+        {
+          "day": "Friday",
+          "startTime": "10:30",
+          "endTime": "11:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        },
+        {
+          "day": "Friday",
+          "startTime": "11:30",
+          "endTime": "12:30",
+          "timeSource": "explicit",
+          "timeInferenceReason": null
+        }
+      ],
+      "verificationStatus": "verified"
+    }
+  ]
+}
