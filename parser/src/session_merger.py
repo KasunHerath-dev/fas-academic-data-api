@@ -25,9 +25,20 @@ class SessionMerger:
         days_order = {"Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5}
         sorted_sessions = sorted(sessions, key=lambda s: (days_order.get(s["day"], 99), self._parse_time(s["startTime"]), s["moduleCode"] or s["rawModuleCode"]))
         
+        # Deduplicate exact same sessions (can happen if texts fall on row boundaries or gaps)
+        unique_sessions = []
+        seen = set()
+        for s in sorted_sessions:
+            key = (s["day"], s["startTime"], s["endTime"], s["moduleCode"], s.get("room"), s.get("group"))
+            if key not in seen:
+                seen.add(key)
+                unique_sessions.append(s)
+
+        sorted_sessions = unique_sessions
+
         final_sessions = []
         diagnostics = []
-        
+
         merged_indices = set()
         
         for i, s1 in enumerate(sorted_sessions):

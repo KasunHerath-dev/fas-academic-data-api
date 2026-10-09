@@ -121,7 +121,7 @@ class TableDetector:
         for i in range(len(geometric_y) - 1):
             y0 = geometric_y[i]
             y1 = geometric_y[i+1]
-            if y1 - y0 < 20:
+            if y1 - y0 < 30:
                 continue
             
             row = {

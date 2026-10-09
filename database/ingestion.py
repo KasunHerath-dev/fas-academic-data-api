@@ -69,6 +69,8 @@ def ingest_timetable_pdf(db: Session, temp_pdf_path: str, document_metadata: dic
             major=document_metadata.get("major"),
             programme=document_metadata.get("programme"),
             revision=document_metadata.get("revision", "original"),
+            published_at=document_metadata.get("published_at"),
+            source_updated_at=document_metadata.get("source_updated_at"),
             sha256=document_metadata.get("sha256"),
             status="processed",
             validation_status=validation_result.status.value,
@@ -86,7 +88,10 @@ def ingest_timetable_pdf(db: Session, temp_pdf_path: str, document_metadata: dic
 
         get_or_create_lookup(db, AcademicYear, "year_string", doc.academic_year)
         get_or_create_lookup(db, Semester, "semester_string", doc.semester)
-        get_or_create_lookup(db, Level, "level_string", doc.level)
+        if doc.level:
+            for lvl_part in str(doc.level).replace(" ", "").split(","):
+                if lvl_part:
+                    get_or_create_lookup(db, Level, "level_string", lvl_part)
         get_or_create_lookup(db, Major, "major_string", doc.major)
         get_or_create_lookup(db, Programme, "programme_string", doc.programme)
 

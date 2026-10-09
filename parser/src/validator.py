@@ -39,6 +39,8 @@ class TimetableValidator:
     def _parse_time(self, t_str: str):
         try:
             h, m = map(int, t_str.split(':'))
+            if 1 <= h <= 7:
+                h += 12
             return h * 60 + m
         except (ValueError, AttributeError):
             return None
@@ -55,6 +57,15 @@ class TimetableValidator:
         start_min = self._parse_time(session.start_time)
         end_min = self._parse_time(session.end_time)
         
+        # Adjust 7:xx PM vs 7:xx AM based on context
+        if start_min is not None and end_min is not None:
+            # If start is in the evening (e.g. 5:30 PM) and end is 7:xx AM, it must be 7:xx PM
+            if end_min < start_min and 7 * 60 <= end_min < 8 * 60:
+                end_min += 12 * 60
+            # If start is 7:xx PM but end is in the morning, start must be 7:xx AM
+            if start_min > end_min and 19 * 60 <= start_min < 20 * 60:
+                start_min -= 12 * 60
+
         if start_min is None:
             errors.append(f"Malformed start time: '{session.start_time}'")
         if end_min is None:

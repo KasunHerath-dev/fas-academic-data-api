@@ -15,4 +15,5 @@ class DiscoveredDocument(BaseModel):
     programme: Optional[str] = None
     revision: Optional[str] = None # original, revised, re-revised
     published_at: Optional[datetime] = None
+    source_updated_at: Optional[datetime] = None
     discovered_at: datetime

@@ -62,7 +62,10 @@ def ingest_academic_calendar(db: Session, temp_pdf_path: str, document_metadata:
 
         get_or_create_lookup(db, AcademicYear, "year_string", doc.academic_year)
         get_or_create_lookup(db, Semester, "semester_string", doc.semester)
-        get_or_create_lookup(db, Level, "level_string", doc.level)
+        if doc.level:
+            for lvl_part in str(doc.level).replace(" ", "").split(","):
+                if lvl_part:
+                    get_or_create_lookup(db, Level, "level_string", lvl_part)
         get_or_create_lookup(db, Major, "major_string", doc.major)
         get_or_create_lookup(db, Programme, "programme_string", doc.programme)
  

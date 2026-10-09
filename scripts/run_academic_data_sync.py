@@ -1,5 +1,6 @@
 import argparse
 import sys
+import os
 import logging
 from datetime import datetime, timezone
 import traceback
@@ -104,6 +105,8 @@ def run_sync(dry_run: bool = False):
                     "semester": doc.semester,
                     "level": doc.level,
                     "revision": doc.revision,
+                    "published_at": doc.published_at,
+                    "source_updated_at": getattr(doc, 'source_updated_at', None),
                     "sha256": lifecycle_result.sha256
                 }
                 

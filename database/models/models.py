@@ -16,6 +16,8 @@ class Document(Base):
     major = Column(String, nullable=True)
     programme = Column(String, nullable=True)
     published_at = Column(DateTime(timezone=True), nullable=True)
+    source_updated_at = Column(DateTime(timezone=True), nullable=True)
+    # document_date deferred — no reliable end-to-end extraction implemented yet
     revision = Column(String, nullable=True) # e.g., original, revised, re-revised
     sha256 = Column(String, nullable=False, index=True)
     status = Column(String, nullable=False) # e.g., processing, processed, failed, superseded

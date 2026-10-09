@@ -4,8 +4,8 @@ class SessionParser:
     def __init__(self):
         self.module_pattern = re.compile(r'([A-Z]{4})\s+(\d{4})')
         self.class_type_pattern = re.compile(r'\(\s*([LPT])\s*\)')
-        self.group_pattern = re.compile(r'Gp\.\s*([IVX1-4]+)', re.IGNORECASE)
-        self.suspicious_group_pattern = re.compile(r'Gp\.\s*([a-zA-Z1-9]+)', re.IGNORECASE)
+        self.group_pattern = re.compile(r'(?:Gp\.|Group)\s*([IVX1-4l]+(?:\s*(?:&|and)\s*[IVX1-4l]+)?)', re.IGNORECASE)
+        self.suspicious_group_pattern = re.compile(r'(?:Gp\.|Group)\s*([a-zA-Z1-9]+(?:\s*(?:&|and)\s*[a-zA-Z1-9]+)?)', re.IGNORECASE)
         self.suspicious_module_pattern = re.compile(r'([A-Z]{4})\s+([\d\+\-\ᵻ]{4})')
         # Room regex supports slashes for multiple rooms e.g. LR 01/02/03
         self.room_pattern = re.compile(r'(MH|LR\s*-\s*[\d/]+|LR\s*[\d/]+|Mini\s*Auditorium|Room.*|ELTN\s*Lab|FAS.*)', re.IGNORECASE)
@@ -148,7 +148,7 @@ class SessionParser:
                 if grp_match:
                     raw_grp = grp_match.group(0)
                     session["rawGroup"] = raw_grp
-                    clean_grp = grp_match.group(1).upper()
+                    clean_grp = grp_match.group(1).upper().replace('L', 'I')
                     diag["nearbyGroupCandidates"].append(raw_grp)
                     
                     if self.group_pattern.fullmatch(raw_grp):
@@ -172,6 +172,11 @@ class SessionParser:
                     session["rawRoom"] = raw_room
                     norm_room = re.sub(r'\s*-\s*', '-', raw_room)
                     norm_room = re.sub(r'\s+', ' ', norm_room).strip()
+                    # Strip class-type markers that bleed into the room string,
+                    # e.g. "FAS Computer Lab)" or "Room 22) (P)" or "Room 23) (L) LR-09" or "Room No. 23 (L) LR-07"
+                    norm_room = re.sub(r'\)?\s*\([LPT]\).*$', '', norm_room).strip()
+                    norm_room = norm_room.rstrip(')')
+                    norm_room = norm_room.strip()
                     session["room"] = norm_room
                     session["validation"]["room"] = True
                     session["confidence"] += 25

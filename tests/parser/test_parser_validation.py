@@ -28,7 +28,7 @@ def test_valid_session(validator):
     assert res.status == ValidationStatus.VALID
 
 def test_invalid_time_range(validator):
-    s = create_session(start_time="10:30", end_time="08:30")
+    s = create_session(start_time="14:30", end_time="13:30")
     res = validator.validate_session(s)
     assert res.status == ValidationStatus.INVALID
     assert any("Invalid time range" in e for e in res.errors)
