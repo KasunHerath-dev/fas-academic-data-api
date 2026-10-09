@@ -1,6 +1,8 @@
 import os
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
 from api.routes import health, academic_structure, timetables, calendar, documents, sync_runs
 
 tags_metadata = [
@@ -40,6 +42,11 @@ app.add_middleware(
     allow_methods=["GET"],
     allow_headers=["*"],
 )
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+def developer_portal():
+    template_path = Path(__file__).parent / "templates" / "portal.html"
+    return template_path.read_text(encoding="utf-8")
 
 app.include_router(health.router, prefix="/api/v1")
 app.include_router(academic_structure.router, prefix="/api/v1")

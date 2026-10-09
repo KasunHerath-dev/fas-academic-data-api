@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAS Academic Data API - Developer Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+            --accent: #10b981;
+            --accent-bg: #ecfdf5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .header-links a {
+            margin-left: 1.5rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .header-links a:hover {
+            color: var(--primary);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        section:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 0.5rem;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--accent-bg);
+            color: var(--accent);
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .arch-card {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .arch-card h3 {
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .arch-card p {
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary);
+        }
+
+        .endpoint-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .endpoint-header {
+            background: var(--bg);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .method-get {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-right: 1rem;
+        }
+
+        .endpoint-path {
+            font-family: monospace;
+            font-weight: 600;
+            color: var(--text-main);
+            flex-grow: 1;
+        }
+
+        .copy-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .endpoint-details {
+            padding: 1.5rem;
+            display: none;
+            border-top: 1px solid var(--border);
+        }
+
+        .endpoint-details.active {
+            display: block;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: -1px;
+        }
+
+        .code-tab {
+            padding: 0.5rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .code-tab.active {
+            background: var(--code-bg);
+            color: var(--code-text);
+            border-color: var(--code-bg);
+        }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        .param-table th, .param-table td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+
+        .param-table th {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .param-table td {
+            color: var(--text-muted);
+        }
+        
+        .param-table code {
+            background: var(--bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: linear-gradient(to bottom, #ffffff, #f8fafc);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .base-url-container {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .base-url-container code {
+            font-size: 1rem;
+            color: var(--primary);
+            margin-right: 1rem;
+        }
+        
+        .tag {
+            font-size: 0.75rem;
+            background: #e2e8f0;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            color: #475569;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>FAS Academic Data API</h1>
+        </div>
+        <div class="header-links">
+            <a href="/docs" target="_blank">Swagger UI</a>
+            <a href="/redoc" target="_blank">ReDoc</a>
+            <a href="/openapi.json" target="_blank">OpenAPI JSON</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>Developer Portal</h1>
+            <p>Access structured, validated academic data from the Faculty of Applied Sciences (FAS) through our read-only RESTful API.</p>
+            <div class="base-url-container">
+                <code id="base-url-display">https://fas-academic-data-api.vercel.app</code>
+                <button class="copy-btn" onclick="copyBaseUrl()">Copy Base URL</button>
+            </div>
+        </div>
+
+        <section id="about">
+            <h2>About the API</h2>
+            <p>
+                The FAS Academic Data API acts as a centralized read-only data layer for academic schedules, calendars, and structural data. Third-party applications (like AttendTrack) request JSON data directly from this API. <strong>The API does not push data into third-party systems.</strong>
+            </p>
+            
+            <div style="margin-top: 1rem;">
+                <span class="badge">Read-Only</span>
+                <span class="badge">JSON</span>
+                <span class="badge">REST</span>
+                <span class="badge">No Authentication Required</span>
+            </div>
+
+            <div class="architecture-grid">
+                <div class="arch-card">
+                    <h3>1. Ingestion Pipeline</h3>
+                    <p>Automated GitHub Actions periodically discover, download, and process source PDFs (timetables & calendars) from official FAS channels. The API itself <strong>never</strong> performs synchronous scraping or OCR parsing during GET requests.</p>
+                </div>
+                <div class="arch-card">
+                    <h3>2. Storage & Versioning</h3>
+                    <p>Extracted data is strictly validated and stored in Neon PostgreSQL. Source documents are versioned using SHA-256 hashes, ensuring data freshness without storing the raw binary PDFs permanently.</p>
+                </div>
+                <div class="arch-card">
+                    <h3>3. Vercel Hosting</h3>
+                    <p>The FastAPI application is deployed as Serverless Functions on Vercel. It utilizes connection pooling optimizations (NullPool) to handle highly concurrent read traffic efficiently.</p>
+                </div>
+                <div class="arch-card">
+                    <h3>4. Policies</h3>
+                    <p><strong>CORS:</strong> Enabled for permitted origins.<br><strong>Rate Limits:</strong> None currently enforced.<br><strong>Data Freshness:</strong> Updated automatically via background ingestion workflows.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="endpoints">
+            <h2>Endpoint Catalog</h2>
+            <p>Explore the available read-only endpoints. Click an endpoint to view query parameters and code examples.</p>
+            
+            <input type="text" class="search-box" id="search-input" placeholder="Search endpoints (e.g. timetables, calendar)..." onkeyup="filterEndpoints()">
+
+            <div id="endpoint-list">
+                <!-- Endpoints will be injected here via JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const baseUrl = window.location.origin;
+        document.getElementById('base-url-display').innerText = baseUrl;
+
+        function copyBaseUrl() {
+            navigator.clipboard.writeText(baseUrl);
+            alert("Base URL copied to clipboard!");
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            alert("Copied to clipboard!");
+        }
+
+        function toggleEndpoint(id) {
+            const details = document.getElementById(id);
+            details.classList.toggle('active');
+        }
+
+        const endpoints = [
+            {
+                id: 'ep-health',
+                method: 'GET',
+                path: '/api/v1/health',
+                desc: 'Returns the health status of the API and database connectivity.',
+                params: [],
+                response: '{\n  "status": "ok",\n  "database": "connected"\n}'
+            },
+            {
+                id: 'ep-academic-years',
+                method: 'GET',
+                path: '/api/v1/academic-years',
+                desc: 'Returns a list of all available academic years in the system.',
+                params: [],
+                response: '[\n  {\n    "id": 1,\n    "year_string": "2023/2024",\n    "start_date": "2024-01-01",\n    "end_date": "2024-12-31"\n  }\n]'
+            },
+            {
+                id: 'ep-semesters',
+                method: 'GET',
+                path: '/api/v1/semesters',
+                desc: 'Returns structured semester information.',
+                params: [],
+                response: '[\n  {\n    "id": 1,\n    "semester_string": "Semester 1",\n    "academic_year_id": 1\n  }\n]'
+            },
+            {
+                id: 'ep-modules',
+                method: 'GET',
+                path: '/api/v1/modules',
+                desc: 'Returns a list of academic modules with optional filtering.',
+                params: [
+                    {name: 'level', type: 'string', desc: 'Filter by level (e.g., Level 1)'},
+                    {name: 'major', type: 'string', desc: 'Filter by major (e.g., Computer Science)'},
+                    {name: 'programme', type: 'string', desc: 'Filter by programme'},
+                    {name: 'module_code', type: 'string', desc: 'Filter by module code (e.g., CMIS 1114)'}
+                ],
+                response: '[\n  {\n    "id": 1,\n    "module_code": "CMIS 1114",\n    "name": "Fundamentals of Computing"\n  }\n]'
+            },
+            {
+                id: 'ep-timetables',
+                method: 'GET',
+                path: '/api/v1/timetables',
+                desc: 'Retrieves parsed and validated timetable sessions.',
+                params: [
+                    {name: 'academic_year', type: 'string', desc: 'Filter by academic year'},
+                    {name: 'semester', type: 'string', desc: 'Filter by semester'},
+                    {name: 'level', type: 'string', desc: 'Filter by academic level'},
+                    {name: 'day_of_week', type: 'string', desc: 'Filter by day (e.g., Monday)'}
+                ],
+                response: '[\n  {\n    "id": 1,\n    "module_code": "CMIS 1114",\n    "day_of_week": "Monday",\n    "start_time": "08:00:00",\n    "end_time": "10:00:00",\n    "location": "Lab 1"\n  }\n]'
+            },
+            {
+                id: 'ep-calendar-events',
+                method: 'GET',
+                path: '/api/v1/calendar/events',
+                desc: 'Retrieves academic calendar events (exams, vacations, etc.).',
+                params: [
+                    {name: 'academic_year_id', type: 'integer', desc: 'Filter by academic year ID'},
+                    {name: 'event_type', type: 'string', desc: 'Filter by event type (e.g., Exam, Vacation)'}
+                ],
+                response: '[\n  {\n    "id": 1,\n    "event_name": "End Semester Examination",\n    "event_type": "Exam",\n    "start_date": "2024-05-15",\n    "end_date": "2024-06-15"\n  }\n]'
+            },
+            {
+                id: 'ep-documents',
+                method: 'GET',
+                path: '/api/v1/documents',
+                desc: 'Retrieves metadata for ingested source documents (hash, revision, URL).',
+                params: [
+                    {name: 'document_type', type: 'string', desc: 'Filter by document type (e.g., timetable, calendar)'}
+                ],
+                response: '[\n  {\n    "id": 1,\n    "document_type": "timetable",\n    "source_url": "https://fas.wyb.ac.lk/...",\n    "file_hash": "a1b2c3d4...",\n    "revision_number": 1\n  }\n]'
+            }
+        ];
+
+        function renderEndpoints() {
+            const container = document.getElementById('endpoint-list');
+            container.innerHTML = '';
+
+            endpoints.forEach(ep => {
+                const epHtml = `
+                    <div class="endpoint-card" data-search="${ep.path.toLowerCase()} ${ep.desc.toLowerCase()}">
+                        <div class="endpoint-header" onclick="toggleEndpoint('${ep.id}')">
+                            <div style="display: flex; align-items: center; flex-grow: 1;">
+                                <span class="method-get">${ep.method}</span>
+                                <span class="endpoint-path">${ep.path}</span>
+                            </div>
+                            <span class="tag">Click to expand</span>
+                        </div>
+                        <div class="endpoint-details" id="${ep.id}">
+                            <p>${ep.desc}</p>
+                            
+                            ${ep.params.length > 0 ? `
+                            <h4>Query Parameters</h4>
+                            <table class="param-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${ep.params.map(p => `
+                                        <tr>
+                                            <td><code>${p.name}</code></td>
+                                            <td>${p.type}</td>
+                                            <td>${p.desc}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                            ` : ''}
+
+                            <h4>Integration Examples</h4>
+                            <div style="margin-top: 1rem;">
+                                <div class="code-tabs">
+                                    <button class="code-tab active">JavaScript (Fetch)</button>
+                                </div>
+                                <pre><code>fetch('${baseUrl}${ep.path}')
+  .then(response => response.json())
+  .then(data => console.log(data));</code></pre>
+                            </div>
+
+                            <div style="margin-top: 1rem;">
+                                <div class="code-tabs">
+                                    <button class="code-tab active">Python (Requests)</button>
+                                </div>
+                                <pre><code>import requests\n\nresponse = requests.get('${baseUrl}${ep.path}')\ndata = response.json()\nprint(data)</code></pre>
+                            </div>
+
+                            <h4>Sample Response (Schema)</h4>
+                            <pre><code>${ep.response}</code></pre>
+                            
+                            <button class="copy-btn" onclick="copyText('${baseUrl}${ep.path}')">Copy Full URL</button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += epHtml;
+            });
+        }
+
+        function filterEndpoints() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.endpoint-card');
+            
+            cards.forEach(card => {
+                const searchData = card.getAttribute('data-search');
+                if (searchData.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize
+        renderEndpoints();
+    </script>
+</body>
+</html>
