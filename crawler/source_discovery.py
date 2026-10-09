@@ -27,6 +27,20 @@ class SourceDiscovery:
             logger.error(f"Failed to fetch {url}: {e}")
             return ""
 
+    def get_pdf_link_from_post(self, post_url: str) -> str:
+        html = self.fetch_page(post_url)
+        if not html:
+            return ""
+        soup = BeautifulSoup(html, "lxml")
+        content_area = soup.find("main") or soup.find("div", class_="entry-content") or soup.body
+        if not content_area:
+            return ""
+        for a_tag in content_area.find_all("a", href=True):
+            href = a_tag["href"].strip()
+            if href.lower().endswith(".pdf"):
+                return urljoin(post_url, href)
+        return ""
+
     def discover_documents(self, source_url: str) -> list[DiscoveredDocument]:
         html = self.fetch_page(source_url)
         if not html:
@@ -36,7 +50,6 @@ class SourceDiscovery:
         discovered = []
         seen_urls = set()
 
-        # Try to constrain to main content to avoid header/footer noise
         content_area = soup.find("main") or soup.find("div", class_="entry-content") or soup.body
         
         if not content_area:
@@ -60,16 +73,41 @@ class SourceDiscovery:
             if not link_text:
                 link_text = absolute_url.split("/")[-1]
                 
-            # Ignore "Read More" links as they usually duplicate the post title links
             if "read more" in link_text.lower():
+                continue
+                
+            # If the link itself is a PDF, use it
+            if absolute_url.lower().endswith(".pdf"):
+                pdf_url = absolute_url
+                post_url = source_url
+            else:
+                # Assuming it's a post, let's try to get the PDF from it
+                # We can skip obvious non-post links (like category tags)
+                if "/category/" in absolute_url.lower() or "/tag/" in absolute_url.lower() or "/author/" in absolute_url.lower():
+                    continue
+                
+                pdf_url = self.get_pdf_link_from_post(absolute_url)
+                post_url = absolute_url
+                
+            if not pdf_url:
                 continue
 
             title = link_text 
             meta = extract_metadata(title)
             
+            # Distinguish timetables and calendars
+            # If it's the timetable listing page and it's an exam timetable, the metadata_extractor might not handle it or handle it as unknown.
+            # We want to skip examination timetables per instruction "Distinguish academic timetables from examination timetables and unrelated PDFs."
+            if "exam" in title.lower():
+                continue
+                
+            # Skip if unknown
+            if meta["document_type"] == "unknown":
+                continue
+            
             doc = DiscoveredDocument(
-                source_url=absolute_url,
-                source_page_url=source_url,
+                source_url=pdf_url,
+                source_page_url=post_url,
                 title=title,
                 link_text=link_text,
                 document_type=meta["document_type"],

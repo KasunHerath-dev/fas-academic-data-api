@@ -140,8 +140,30 @@ def run_sync(dry_run: bool = False):
 
     finalize_sync_run(db, sync_run, dry_run, status=final_status, error_summary=error_summary)
     
+    
     logger.info(f"Sync complete. Status: {final_status}")
     logger.info(f"Checked: {sync_run.documents_checked}, Changed: {sync_run.documents_changed}, Processed: {sync_run.documents_processed}, Skipped: {sync_run.documents_skipped}, Failed: {sync_run.documents_failed}")
+    
+    # Write summary for GitHub Actions
+    summary = f"""
+### Sync Run: {final_status.upper()}
+- **Documents Discovered/Checked:** {sync_run.documents_checked}
+- **Documents Changed:** {sync_run.documents_changed}
+- **Documents Skipped:** {sync_run.documents_skipped}
+- **Successfully Processed:** {sync_run.documents_processed}
+- **Parse/Validation Failures:** {sync_run.documents_failed}
+"""
+    if error_summary:
+        summary += f"\n**Error Summary:** {error_summary}\n"
+        
+    summary_file = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summary_file:
+        try:
+            with open(summary_file, "a") as sf:
+                sf.write(summary)
+        except:
+            pass
+
     
     db.close()
     

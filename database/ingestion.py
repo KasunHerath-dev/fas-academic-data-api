@@ -2,7 +2,7 @@ import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 
-from database.models.models import Document, TimetableSession
+from database.models.models import Document, TimetableSession, AcademicYear, Semester, Level, Major, Programme
 from parser.src.api import parse_timetable
 from parser.src.validator import TimetableValidator, DocumentGateStatus
 
@@ -14,6 +14,16 @@ class IngestionResult:
         self.document_id = document_id
         self.validation_result = validation_result
         self.error = error
+
+
+def get_or_create_lookup(db, model, field, value):
+    if not value: return None
+    obj = db.query(model).filter(getattr(model, field) == value).first()
+    if not obj:
+        obj = model(**{field: value})
+        db.add(obj)
+        db.flush()
+    return obj
 
 def ingest_timetable_pdf(db: Session, temp_pdf_path: str, document_metadata: dict) -> IngestionResult:
     """
@@ -73,6 +83,13 @@ def ingest_timetable_pdf(db: Session, temp_pdf_path: str, document_metadata: dic
         )
         db.add(doc)
         db.flush() # get doc.id
+
+        get_or_create_lookup(db, AcademicYear, "year_string", doc.academic_year)
+        get_or_create_lookup(db, Semester, "semester_string", doc.semester)
+        get_or_create_lookup(db, Level, "level_string", doc.level)
+        get_or_create_lookup(db, Major, "major_string", doc.major)
+        get_or_create_lookup(db, Programme, "programme_string", doc.programme)
+
 
         # Insert TimetableSessions
         for parsed_session, session_val_res in zip(parsed_timetable.sessions, validation_result.session_results):

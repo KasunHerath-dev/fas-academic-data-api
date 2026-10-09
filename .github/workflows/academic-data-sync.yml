@@ -65,10 +65,7 @@ jobs:
           cat sync_output.log
           
           # Generate Summary
-          echo "## Synchronization Summary" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          tail -n 10 sync_output.log >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          # Summary is now appended directly by run_academic_data_sync.py
           
           if [ $SYNC_EXIT_CODE -ne 0 ]; then
             echo "❌ **Sync failed with exit code $SYNC_EXIT_CODE**" >> $GITHUB_STEP_SUMMARY
