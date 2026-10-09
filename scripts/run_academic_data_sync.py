@@ -14,6 +14,13 @@ from crawler.pdf_lifecycle import managed_pdf_lifecycle
 from crawler.change_detector import ChangeStatus
 from database.ingestion import ingest_timetable_pdf
 from database.ingestion_calendar import ingest_academic_calendar
+from crawler.downloader import download_temporary_pdf
+from crawler.hasher import calculate_sha256
+from parser.src.api import parse_timetable
+from parser.src.validator import TimetableValidator
+from parser.calendar.api import parse_academic_calendar
+from parser.calendar.ocr_extractor import extract_calendar_data
+from parser.calendar.validator import CalendarValidator
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -41,7 +48,7 @@ def finalize_sync_run(db: Session, sync_run: SyncRun, dry_run: bool, status: str
     sync_run.completed_at = datetime.now(timezone.utc)
     if error_summary:
         sync_run.error_summary = error_summary
-        
+
     if not dry_run:
         db.add(sync_run)
         db.commit()
@@ -49,17 +56,17 @@ def finalize_sync_run(db: Session, sync_run: SyncRun, dry_run: bool, status: str
 def run_sync(dry_run: bool = False):
     db = SessionLocal()
     sync_run = initialize_sync_run(db, dry_run)
-    
+
     crawler = SourceDiscovery()
     discovered_documents = []
-    
+
     try:
         logger.info(f"Discovering timetables from {TIMETABLE_URL}")
         discovered_documents.extend(crawler.discover_documents(TIMETABLE_URL))
-        
+
         logger.info(f"Discovering academic calendars from {CALENDAR_URL}")
         discovered_documents.extend(crawler.discover_documents(CALENDAR_URL))
-        
+
     except Exception as e:
         logger.error(f"Source discovery failed: {e}")
         finalize_sync_run(db, sync_run, dry_run, status="failed", error_summary="Source discovery failed.")
@@ -67,35 +74,35 @@ def run_sync(dry_run: bool = False):
         sys.exit(1)
 
     sync_run.documents_checked = len(discovered_documents)
-    
+
     for doc in discovered_documents:
         logger.info(f"Processing document: {doc.title} ({doc.url})")
-        
+
         try:
             with managed_pdf_lifecycle(db, doc) as lifecycle_result:
                 if lifecycle_result.error:
                     logger.error(f"Lifecycle error for {doc.title}: {lifecycle_result.error}")
                     sync_run.documents_failed += 1
                     continue
-                    
+
                 change_result = lifecycle_result.change_result
                 if not change_result:
                     logger.error(f"No change result for {doc.title}")
                     sync_run.documents_failed += 1
                     continue
-                    
+
                 if change_result.status == ChangeStatus.UNCHANGED:
                     logger.info(f"Document unchanged: {doc.title}")
                     sync_run.documents_skipped += 1
                     continue
-                
+
                 sync_run.documents_changed += 1
-                
+
                 if dry_run:
                     logger.info(f"[DRY-RUN] Would process {change_result.status.name} document: {doc.title}")
                     sync_run.documents_processed += 1
                     continue
-                
+
                 # Ingestion
                 metadata = {
                     "source_url": doc.url,
@@ -109,7 +116,7 @@ def run_sync(dry_run: bool = False):
                     "source_updated_at": getattr(doc, 'source_updated_at', None),
                     "sha256": lifecycle_result.sha256
                 }
-                
+
                 if doc.document_type == "TIMETABLE":
                     ingest_result = ingest_timetable_pdf(db, lifecycle_result.temp_path, metadata)
                 elif doc.document_type == "ACADEMIC_CALENDAR":
@@ -118,14 +125,14 @@ def run_sync(dry_run: bool = False):
                     logger.error(f"Unknown document type {doc.document_type} for {doc.title}")
                     sync_run.documents_failed += 1
                     continue
-                
+
                 if ingest_result.success:
                     logger.info(f"Successfully processed {doc.title} (Doc ID: {ingest_result.document_id})")
                     sync_run.documents_processed += 1
                 else:
                     logger.error(f"Failed to process {doc.title}: {ingest_result.error}")
                     sync_run.documents_failed += 1
-                    
+
         except Exception as e:
             logger.error(f"Unexpected error processing {doc.title}: {e}")
             sync_run.documents_failed += 1
@@ -136,17 +143,17 @@ def run_sync(dry_run: bool = False):
             final_status = "partial"
         else:
             final_status = "failed"
-            
+
     error_summary = None
     if sync_run.documents_failed > 0:
         error_summary = f"{sync_run.documents_failed} documents failed processing."
 
     finalize_sync_run(db, sync_run, dry_run, status=final_status, error_summary=error_summary)
-    
-    
+
+
     logger.info(f"Sync complete. Status: {final_status}")
     logger.info(f"Checked: {sync_run.documents_checked}, Changed: {sync_run.documents_changed}, Processed: {sync_run.documents_processed}, Skipped: {sync_run.documents_skipped}, Failed: {sync_run.documents_failed}")
-    
+
     # Write summary for GitHub Actions
     summary = f"""
 ### Sync Run: {final_status.upper()}
@@ -158,7 +165,7 @@ def run_sync(dry_run: bool = False):
 """
     if error_summary:
         summary += f"\n**Error Summary:** {error_summary}\n"
-        
+
     summary_file = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary_file:
         try:
@@ -167,15 +174,76 @@ def run_sync(dry_run: bool = False):
         except:
             pass
 
-    
+
     db.close()
-    
+
     if final_status == "failed":
         sys.exit(1)
+
+def run_dry_run():
+    crawler = SourceDiscovery()
+    discovered_documents = []
+
+    try:
+        logger.info(f"Discovering timetables from {TIMETABLE_URL}")
+        discovered_documents.extend(crawler.discover_documents(TIMETABLE_URL))
+
+        logger.info(f"Discovering academic calendars from {CALENDAR_URL}")
+        discovered_documents.extend(crawler.discover_documents(CALENDAR_URL))
+
+    except Exception as e:
+        logger.error(f"Source discovery failed: {e}")
+        sys.exit(1)
+
+    documents_checked = len(discovered_documents)
+    documents_processed = 0
+    documents_failed = 0
+
+    tt_val = TimetableValidator()
+    cal_val = CalendarValidator()
+
+    for doc in discovered_documents:
+        logger.info(f"Processing document: {doc.title} ({doc.url})")
+        temp_path = None
+        try:
+            temp_path = download_temporary_pdf(doc.source_url)
+            sha256_hash = calculate_sha256(temp_path)
+            logger.info(f"[DRY-RUN] Downloaded and hashed {doc.title}. SHA256: {sha256_hash}")
+
+            if doc.document_type == "TIMETABLE":
+                res = parse_timetable(temp_path)
+                vr = tt_val.validate_timetable(res)
+                status = vr.status.value if hasattr(vr.status, 'value') else vr.status
+                logger.info(f"[DRY-RUN] Parsed Timetable. Status: {status}. Verified: {vr.valid_sessions}, Uncertain: {vr.uncertain_sessions}, Rejected: {vr.invalid_sessions}")
+                documents_processed += 1
+            elif doc.document_type == "ACADEMIC_CALENDAR":
+                res = extract_calendar_data(temp_path)
+                vr = cal_val.validate_calendar(res)
+                status = vr.status.value if hasattr(vr.status, 'value') else vr.status
+                logger.info(f"[DRY-RUN] Parsed Calendar. Status: {status}. Periods: {len(res.periods)}")
+                documents_processed += 1
+            else:
+                logger.error(f"Unknown document type {doc.document_type} for {doc.title}")
+                documents_failed += 1
+        except Exception as e:
+            logger.error(f"Unexpected error processing {doc.title}: {e}")
+            documents_failed += 1
+        finally:
+            if temp_path and os.path.exists(temp_path):
+                try:
+                    os.remove(temp_path)
+                except Exception as e:
+                    logger.error(f"Failed to delete temporary PDF at {temp_path}: {e}")
+
+    logger.info("Dry-run complete.")
+    logger.info(f"Checked: {documents_checked}, Processed: {documents_processed}, Failed: {documents_failed}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Synchronize FAS Academic Data")
     parser.add_argument("--dry-run", action="store_true", help="Run without writing to the database")
     args = parser.parse_args()
-    
-    run_sync(dry_run=args.dry_run)
+
+    if args.dry_run:
+        run_dry_run()
+    else:
+        run_sync(dry_run=args.dry_run)
