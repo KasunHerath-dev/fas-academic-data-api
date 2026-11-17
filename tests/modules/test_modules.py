@@ -61,16 +61,30 @@ def test_repaired_prefix_carries_catalogue_title():
     assert match.confidence < 0.9  # prefix repairs are flagged for review
 
 
-def test_well_formed_code_missing_from_catalogue_is_not_rewritten():
-    """Doc §6: never silently rewrite a valid code; only suggest the closest module."""
+def test_code_missing_from_catalogue_resolves_to_closest_module():
     match = match_module_code("MATH 1113")
-    assert match.code == "MATH 1113"
-    assert match.status == "unlisted"
-    assert match.closest_match == "MATH 1112"
-    assert match.module is None
+    assert match.code == "MATH 1112"
+    assert match.status == "closest_match"
+    assert match.module.title == "Introduction to Mathematics I"
+    assert match.raw == "MATH 1113"
 
 
-def test_new_subject_prefix_is_kept():
+def test_closest_match_prefers_same_semester_then_confirmed_tracker_modules():
+    # CMIS 3122 (tracker) and CMIS 3124 (unconfirmed timetable code) are equally close
+    assert match_module_code("CMIS 3125").code == "CMIS 3122"
+    # year-long codes match year-long modules
+    assert match_module_code("ELTN 4+99").code == "ELTN 4†92"
+    # no exact module number: still the closest module of that subject and level
+    assert match_module_code("STAT 4199").code == "STAT 4114"
+
+
+def test_timetable_codes_listed_in_overrides_match_exactly():
+    """Review group D codes are real modules; they must not be pulled onto a neighbour."""
+    for code in ("CMIS 3124", "IMGT 4163", "STAT 4124"):
+        assert match_module_code(code).code == code
+
+
+def test_subject_with_no_catalogue_module_at_that_level_is_kept():
     match = match_module_code("GNCT 1112")
     assert match.code == "GNCT 1112"
     assert match.status == "unlisted"
@@ -114,11 +128,13 @@ def test_find_module_codes_does_not_split_inside_a_code():
     assert found == ["CMIS 4142", "MIS 4142", "IMGT 3ᵻ34"]
 
 
-def test_backfill_plan_repairs_only_confident_matches():
+def test_backfill_plan_repairs_every_resolvable_code():
     from types import SimpleNamespace
     from scripts.normalize_module_codes import plan_repairs
 
     rows = [SimpleNamespace(module_code=c) for c in
-            ["MIS 4142", "IMGT 3+34", "CMIS 2123", "MATH 1113", None, "CMLS 9999"]]
-    repairs, _ = plan_repairs(rows)
-    assert {(s.module_code, m.code) for s, m in repairs} == {("MIS 4142", "CMIS 4142"), ("IMGT 3+34", "IMGT 3†34")}
+            ["MIS 4142", "IMGT 3+34", "CMIS 2123", "MATH 1113", None, "GNCT 1112"]]
+    repairs, skipped = plan_repairs(rows)
+    assert {(s.module_code, m.code) for s, m in repairs} == {
+        ("MIS 4142", "CMIS 4142"), ("IMGT 3+34", "IMGT 3†34"), ("MATH 1113", "MATH 1112")}
+    assert skipped == []

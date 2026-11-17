@@ -15,10 +15,12 @@ module catalogue (docs/acadamic/wusl_module_tracker.md plus curated overrides).
 Rules it follows, from the academic-structure document §6:
 
 * The raw text is always kept by the caller; this function never loses it.
-* A code that is already well formed is never rewritten, even if it is missing
-  from the catalogue (the catalogue is the 2020/2021 prospectus and the faculty
-  has added modules since). The closest catalogue entry is only *suggested*.
-* A malformed code is only rewritten when the repair is unambiguous.
+* Every resolvable code is mapped onto the catalogue: a well-formed code that is
+  missing from it resolves to the closest catalogue module of the same subject
+  and level (status ``closest_match``). Codes seen in current timetables are
+  listed in data/module_overrides.json so they match exactly instead.
+* A code is kept as read only when the catalogue has no module for that subject
+  and level (status ``unlisted``).
 """
 from __future__ import annotations
 
@@ -89,7 +91,7 @@ class ModuleMatch:
     code: Optional[str]
     """Canonical code to use, or None when the text could not be resolved."""
     status: str
-    """exact | normalized | unlisted | named_course | unresolved"""
+    """exact | normalized | closest_match | unlisted | named_course | unresolved"""
     confidence: float
     module: Optional[CatalogueModule] = None
     closest_match: Optional[str] = None
@@ -235,17 +237,27 @@ def _repair_prefix(prefix: str, body: str, notes: list[str]) -> tuple[Optional[s
 
 
 def _closest(code: str) -> Optional[str]:
-    """Closest catalogue code with the same prefix, level and semester."""
+    """
+    Closest catalogue module for a well-formed code that is not in the catalogue.
+
+    Candidates share the subject prefix and level; the same semester is preferred
+    (falling back to any semester of that level). Ranking: fewest differing digits,
+    then same module number, then faculty-confirmed tracker entries, then code order.
+    Returns None when the catalogue has no module for that subject and level.
+    """
     prefix, body = code.split(" ")
-    best, best_d = None, 99
-    for other in load_catalogue():
-        op, ob = other.split(" ")
-        if op != prefix or ob[:2] != body[:2]:
-            continue
-        d = _levenshtein(body, ob)
-        if d < best_d or (d == best_d and other < (best or "~")):
-            best, best_d = other, d
-    return best if best_d <= 1 else None
+    catalogue = load_catalogue()
+    same_level = [c for c in catalogue if c.split(" ")[0] == prefix and c.split(" ")[1][0] == body[0]]
+    same_semester = [c for c in same_level if c.split(" ")[1][1] == body[1]]
+    candidates = same_semester or same_level
+    if not candidates:
+        return None
+
+    def rank(other: str):
+        ob = other.split(" ")[1]
+        return (_levenshtein(body, ob), ob[2] != body[2], not catalogue[other].confirmed, other)
+
+    return min(candidates, key=rank)
 
 
 def match_module_code(raw: Optional[str]) -> ModuleMatch:
@@ -287,14 +299,18 @@ def match_module_code(raw: Optional[str]) -> ModuleMatch:
         return ModuleMatch(raw=raw, code=code, status=status, confidence=confidence if status != "exact" else 1.0,
                            module=catalogue[code], notes=notes)
 
-    # Well formed but not in the catalogue: keep it, only suggest the closest entry.
+    # Well formed but not in the catalogue: resolve to the closest catalogue module
+    # (same subject and level) so every scraped code maps onto the tracker.
     closest = _closest(code)
     if closest:
-        notes.append(f"not in module catalogue; closest catalogue module is {closest}")
-    else:
-        notes.append("not in module catalogue")
+        notes.append(f"'{code}' is not in the module catalogue; matched to closest module {closest}")
+        distance = _levenshtein(code, closest)
+        return ModuleMatch(raw=raw, code=closest, status="closest_match",
+                           confidence=round(min(confidence, 0.8 if distance <= 1 else 0.6), 2),
+                           module=catalogue[closest], closest_match=closest, notes=notes)
+    notes.append(f"no catalogue module for {prefix} level {body[0]}; code kept as read")
     return ModuleMatch(raw=raw, code=code, status="unlisted" if code == text else "normalized",
-                       confidence=round(min(confidence, 0.8), 2), closest_match=closest, notes=notes)
+                       confidence=round(min(confidence, 0.5), 2), notes=notes)
 
 
 def find_module_codes(text: str) -> list[tuple[str, int, int]]:

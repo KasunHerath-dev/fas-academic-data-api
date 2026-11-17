@@ -3,7 +3,7 @@ from typing import Optional, Any, List
 
 
 class ModuleMatchInfo(BaseModel):
-    status: str = Field(description="exact | normalized | unlisted | named_course | unresolved")
+    status: str = Field(description="exact | normalized | closest_match | unlisted | named_course | unresolved")
     confidence: float
     in_catalogue: bool
     catalogue_confirmed: Optional[bool] = Field(

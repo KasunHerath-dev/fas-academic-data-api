@@ -42,8 +42,9 @@ def get_catalogue_modules(
     closest valid module. Examples: `MIS 4142` → `CMIS 4142`, `IMGT 3+34` →
     `IMGT 3†34`, `cmis2123` → `CMIS 2123`.
 
-    A well-formed code that is missing from the catalogue is returned unchanged
-    with `status: "unlisted"` and the nearest catalogue entry in `closest_match`.
+    A well-formed code missing from the catalogue resolves to the closest catalogue
+    module of the same subject and level (`status: "closest_match"`). It is kept
+    unchanged (`status: "unlisted"`) only when no such module exists.
     """,
 )
 def resolve_module_code(code: str = Query(..., min_length=1, max_length=64, description="Raw module code text")):

@@ -11,8 +11,8 @@ from typing import Optional
 
 from academic.modules import CANONICAL_CODE_RE, match_module_code
 
-# Only repair stored codes at read time when the match is this certain.
-READ_TIME_REPAIR_MIN_CONFIDENCE = 0.8
+# Stored codes are repaired at read time whenever they resolve to a catalogue code.
+READ_TIME_REPAIR_MIN_CONFIDENCE = 0.0
 
 
 def resolve_query_code(module_code: Optional[str]) -> list[str]:

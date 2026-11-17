@@ -77,10 +77,15 @@ Resolves raw or OCR-damaged text to the closest module:
 | `MIS 4142` | `CMIS 4142` | `normalized` (prefix letter dropped by OCR) |
 | `IMGT 3+34`, `IMGT 3ᵻ34` | `IMGT 3†34` | `normalized` (dagger misread) |
 | `cmis2123`, `CMIS 2l23` | `CMIS 2123` | `normalized` |
-| `MATH 1113` | `MATH 1113` | `unlisted`, `closest_match: MATH 1112` |
+| `MATH 1113` | `MATH 1112` | `closest_match` (not in the tracker; closest module of the same subject and level) |
+| `GNCT 1112` | `GNCT 1112` | `unlisted` (no catalogue module for that subject and level) |
 | `Business English` | `Business English` | `named_course` (non-credit) |
 
-A well-formed code missing from the catalogue is **never rewritten**; only `closest_match` is suggested.
+Every scraped code is mapped onto the module tracker, so module matching never marks a
+session `uncertain` or a timetable `REVIEW_REQUIRED`. The text read from the PDF is always
+kept in `raw_module_code`. Codes that are real modules but missing from the 2020/2021 tracker
+(e.g. `CMIS 3124`) are listed in `academic/data/module_overrides.json` so they match exactly
+instead of being pulled onto a neighbour; add new ones there.
 Unresolvable text returns `404`.
 
 ---

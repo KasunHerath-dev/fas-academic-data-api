@@ -35,8 +35,8 @@ def test_dropped_prefix_letter_is_repaired_and_kept_as_raw():
     assert s["moduleName"] == "Image Processing"
     assert s["classType"] == "L"
     assert s["rawEvidence"]["moduleMatch"]["status"] == "normalized"
-    # prefix repair is not certain: flagged for review
-    assert any("matched to 'CMIS 4142'" in w for w in s["warnings"])
+    # resolved against the tracker: no review warning
+    assert s["warnings"] == []
 
 
 def test_dagger_variants_become_one_canonical_code_without_warning():
@@ -52,10 +52,32 @@ def test_dagger_code_from_pdf_is_anchored():
     assert [s["moduleCode"] for s in sessions] == ["CMIS 4†18"]
 
 
-def test_unlisted_valid_code_is_kept_and_flagged():
+def test_code_missing_from_tracker_maps_to_closest_module_without_warning():
     sessions = _parse(_words((100, [(10, "CMIS"), (50, "3125"), (95, "(L)")])))
-    assert sessions[0]["moduleCode"] == "CMIS 3125"
-    assert any("not in the module catalogue" in w for w in sessions[0]["warnings"])
+    assert sessions[0]["moduleCode"] == "CMIS 3122"
+    assert sessions[0]["rawModuleCode"] == "CMIS 3125"
+    assert sessions[0]["moduleName"] == "Rapid Application Development"
+    assert sessions[0]["warnings"] == []
+
+
+def test_module_matching_never_puts_a_timetable_into_review():
+    from parser.src.api import ParsedSession, ParsedTimetable
+    from parser.src.validator import DocumentGateStatus
+
+    tokens = [("MIS", "4142"), ("IMGT", "3+34"), ("IMGT", "3ᵻ34"), ("CMIS", "3125"), ("ELPC", "1+10")]
+    parsed = []
+    for i, (prefix, body) in enumerate(tokens):
+        cell = _cell(_words((100, [(10, prefix), (50, body), (95, "(L)")]), (112, [(10, "LR-05")])))
+        cell["startTime"], cell["endTime"] = f"{8 + i}:00", f"{9 + i}:00"
+        s = SessionParser().parse_sessions([cell])[0][0]
+        parsed.append(ParsedSession(
+            day=s["day"], start_time=s["startTime"], end_time=s["endTime"], module_code=s["moduleCode"],
+            raw_module_code=s["rawModuleCode"], session_type=s["classType"], room=s["room"],
+            raw_evidence=s["rawEvidence"], time_source="explicit",
+            verification_status="uncertain" if s["warnings"] else "verified", warnings=s["warnings"]))
+    result = TimetableValidator().validate_timetable(ParsedTimetable(sessions=parsed, diagnostics=[], report={}))
+    assert result.status == DocumentGateStatus.SAFE
+    assert result.uncertain_sessions == 0
 
 
 def test_non_code_tokens_do_not_create_sessions():

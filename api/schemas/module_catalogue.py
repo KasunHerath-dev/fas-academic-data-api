@@ -20,7 +20,7 @@ class CatalogueModuleResponse(BaseModel):
 class ModuleResolutionResponse(BaseModel):
     raw: str
     code: Optional[str] = None
-    status: str = Field(description="exact | normalized | unlisted | named_course")
+    status: str = Field(description="exact | normalized | closest_match | unlisted | named_course")
     confidence: float
     closest_match: Optional[str] = None
     notes: List[str] = []

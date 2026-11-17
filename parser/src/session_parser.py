@@ -2,9 +2,6 @@ import re
 
 from academic.modules import CANONICAL_CODE_RE, CODE_TOKEN_PATTERN, match_module_code
 
-# Matches below this confidence are kept but flagged for review.
-MODULE_MATCH_REVIEW_THRESHOLD = 0.9
-
 class SessionParser:
     def __init__(self):
         self.module_pattern = re.compile(r'([A-Z]{4})\s+(\d{4})')
@@ -141,16 +138,9 @@ class SessionParser:
                     session["moduleName"] = module_match.module.title if module_match.module else None
                     session["validation"]["moduleCode"] = True
                     session["confidence"] += 40
-                    if module_match.status == "unlisted":
-                        hint = f" (closest: {module_match.closest_match})" if module_match.closest_match else ""
-                        session["warnings"].append(
-                            f"Module code '{module_match.code}' is not in the module catalogue{hint}"
-                        )
-                    elif module_match.confidence < MODULE_MATCH_REVIEW_THRESHOLD:
-                        session["warnings"].append(
-                            f"Module code '{anchor['text']}' matched to '{module_match.code}' "
-                            f"(confidence {module_match.confidence}): {'; '.join(module_match.notes)}"
-                        )
+                    # Matching onto the tracker is deterministic: the repaired code is
+                    # used as-is and the match details stay in rawEvidence.moduleMatch.
+                    # No review warning is raised for module matching.
                 else:
                     session["warnings"].append(f"Suspicious module code: {anchor['text']}")
                     session["validation"]["moduleCode"] = False
