@@ -1,0 +1,24 @@
+# Vercel deploys only the read-only API (api/, database/, academic/).
+# Ingestion (crawler, parser, OCR) runs in GitHub Actions, not on Vercel.
+# Keep the function bundle under Vercel's 225 MB limit.
+
+# Local virtualenvs and build output
+/uv_venv
+/test_venv
+/venv
+/.venv
+/build
+*.egg-info
+__pycache__
+.pytest_cache
+
+# Ingestion-only code (not imported by the API)
+/crawler
+/parser
+/scripts
+/src
+
+# Tests, docs and CI config
+/tests
+/docs
+/.github
