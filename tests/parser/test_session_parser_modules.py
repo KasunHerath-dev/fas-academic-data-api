@@ -92,3 +92,27 @@ def test_validator_accepts_canonical_dagger_codes():
     assert v.validate_session(ParsedSession(module_code="Business English", **base)).status == ValidationStatus.VALID
     res = v.validate_session(ParsedSession(module_code="ELTN 3+53", **base))
     assert res.status == ValidationStatus.UNCERTAIN
+
+
+def test_elpc_english_course_without_session_type_is_not_flagged():
+    """ELPC cells print no (L)/(T)/(P) and the dagger reads as '+'; neither is a review issue here."""
+    from parser.src.api import ParsedSession, ParsedTimetable
+    from parser.src.validator import DocumentGateStatus
+
+    parsed = []
+    for i, (body, room) in enumerate([("1+10", "LR-01/02/03"), ("2+20", "Mini Auditorium")]):
+        cell = _cell(_words((100, [(10, "ELPC"), (50, body)]), (112, [(10, room)])))
+        cell["startTime"], cell["endTime"] = f"{8 + i}:00", f"{9 + i}:00"
+        sessions, _ = SessionParser().parse_sessions([cell])
+        assert len(sessions) == 1
+        s = sessions[0]
+        assert s["moduleCode"] == f"ELPC {body[0]}†{body[2:]}"
+        assert s["moduleName"].startswith("English Language Proficiency Course")
+        assert s["warnings"] == []
+        parsed.append(ParsedSession(
+            day=s["day"], start_time=s["startTime"], end_time=s["endTime"], module_code=s["moduleCode"],
+            raw_module_code=s["rawModuleCode"], session_type=s["classType"], room=s["room"],
+            raw_evidence=s["rawEvidence"], time_source="explicit", verification_status="verified",
+            warnings=s["warnings"]))
+    result = TimetableValidator().validate_timetable(ParsedTimetable(sessions=parsed, diagnostics=[], report={}))
+    assert result.status == DocumentGateStatus.SAFE

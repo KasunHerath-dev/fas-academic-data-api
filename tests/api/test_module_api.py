@@ -122,3 +122,19 @@ def test_resolve_endpoint(client):
     assert body["module"]["title"] == "Image Processing"
 
     assert client.get("/api/v1/catalogue/modules/resolve", params={"code": "hello"}).status_code == 404
+
+
+def test_api_never_emits_needs_review_for_english_courses(client):
+    db = SessionLocal()
+    doc_id = db.query(TimetableSession).first().document_id
+    db.add(TimetableSession(document_id=doc_id, academic_year="2024/2025", semester="I", level="1",
+                            day="Wednesday", start_time="13:00", end_time="15:00", module_code="ELPC 1+10",
+                            time_source="explicit", verification_status="verified"))
+    db.commit()
+    db.close()
+    s = client.get("/api/v1/timetables", params={"module_code": "ELPC 1†10"}).json()["data"][0]
+    assert s["module_code"] == "ELPC 1†10"
+    assert s["raw_module_code"] == "ELPC 1+10"
+    assert s["non_credit"] is True
+    assert s["verification_status"] == "verified"
+    assert "NEEDS_REVIEW" not in str(s)
