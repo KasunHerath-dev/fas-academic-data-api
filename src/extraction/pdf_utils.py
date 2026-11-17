@@ -3,7 +3,10 @@ import os
 import tempfile
 import httpx
 from typing import Optional, Tuple
-import pymupdf # PyMuPDF
+try:
+    import pymupdf  # PyMuPDF >= 1.24.3
+except ImportError:  # the pinned PyMuPDF 1.23.x only exposes the legacy name
+    import fitz as pymupdf
 import pdfplumber
 
 def download_pdf(url: str, timeout: int = 30) -> Tuple[Optional[str], Optional[str]]:
