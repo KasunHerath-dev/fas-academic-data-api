@@ -27,7 +27,8 @@ testpaths = [
 ]
 pythonpath = [
     ".",
-    "parser/src"
+    "parser/src",
+    "src"
 ]
 
 [tool.setuptools.packages.find]
