@@ -31,4 +31,7 @@ pythonpath = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["api*", "database*", "crawler*", "parser*"]
+include = ["api*", "database*", "crawler*", "parser*", "academic*"]
+
+[tool.setuptools.package-data]
+academic = ["data/*.json"]

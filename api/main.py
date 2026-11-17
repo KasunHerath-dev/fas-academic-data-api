@@ -3,11 +3,12 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
-from api.routes import health, academic_structure, timetables, calendar, documents, sync_runs
+from api.routes import health, academic_structure, timetables, calendar, documents, sync_runs, module_catalogue
 
 tags_metadata = [
     {"name": "Health", "description": "System and database health checks."},
     {"name": "Academic Structure", "description": "Core academic hierarchy (years, semesters, levels, modules, etc.)."},
+    {"name": "Module Catalogue", "description": "Module titles and credits, and resolution of OCR-damaged module codes."},
     {"name": "Timetables", "description": "Structured timetable sessions retrieved from official documents."},
     {"name": "Academic Calendar", "description": "Academic calendar periods (exams, vacations, etc.)."},
     {"name": "Documents", "description": "Metadata for source PDFs (source URLs, hashes, revisions). Does not provide PDF binaries."},
@@ -50,6 +51,7 @@ def developer_portal():
 
 app.include_router(health.router, prefix="/api/v1")
 app.include_router(academic_structure.router, prefix="/api/v1")
+app.include_router(module_catalogue.router, prefix="/api/v1")
 app.include_router(documents.router, prefix="/api/v1")
 app.include_router(timetables.router, prefix="/api/v1")
 app.include_router(calendar.router, prefix="/api/v1")

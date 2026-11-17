@@ -1,12 +1,18 @@
 import re
 
+from academic.modules import CANONICAL_CODE_RE, CODE_TOKEN_PATTERN, match_module_code
+
+# Matches below this confidence are kept but flagged for review.
+MODULE_MATCH_REVIEW_THRESHOLD = 0.9
+
 class SessionParser:
     def __init__(self):
         self.module_pattern = re.compile(r'([A-Z]{4})\s+(\d{4})')
         self.class_type_pattern = re.compile(r'\(\s*([LPT])\s*\)')
         self.group_pattern = re.compile(r'(?:Gp\.|Group)\s*([IVX1-4l]+(?:\s*(?:&|and)\s*[IVX1-4l]+)?)', re.IGNORECASE)
         self.suspicious_group_pattern = re.compile(r'(?:Gp\.|Group)\s*([a-zA-Z1-9]+(?:\s*(?:&|and)\s*[a-zA-Z1-9]+)?)', re.IGNORECASE)
-        self.suspicious_module_pattern = re.compile(r'([A-Z]{4})\s+([\d\+\-\ᵻ]{4})')
+        # Code-like tokens, including OCR-damaged ones (MIS 4142, IMGT 3+34, CMIS4123).
+        self.suspicious_module_pattern = re.compile(CODE_TOKEN_PATTERN)
         # Room regex supports slashes for multiple rooms e.g. LR 01/02/03
         self.room_pattern = re.compile(r'(MH|LR\s*-\s*[\d/]+|LR\s*[\d/]+|Mini\s*Auditorium|Room.*|ELTN\s*Lab|FAS.*)', re.IGNORECASE)
 
@@ -39,6 +45,9 @@ class SessionParser:
             for line_idx, line in enumerate(lines):
                 text = " ".join([w["word"] for w in line])
                 for match in self.suspicious_module_pattern.finditer(text):
+                    module_match = match_module_code(match.group(0))
+                    if not module_match.resolved:
+                        continue
                     start_idx, end_idx = match.span()
                     anchor_words = []
                     char_count = 0
@@ -51,6 +60,7 @@ class SessionParser:
                     if anchor_words:
                         anchors.append({
                             "text": match.group(0),
+                            "match": module_match,
                             "words": anchor_words,
                             "x_center": sum(w["x0"] + w["x1"] for w in anchor_words) / (2 * len(anchor_words)),
                             "y_center": sum(w["y0"] + w["y1"] for w in anchor_words) / (2 * len(anchor_words))
@@ -105,7 +115,8 @@ class SessionParser:
                     "rawRoom": None,
                     "warnings": [],
                     "rawEvidence": {
-                        "module": {"text": anchor["text"], "x": anchor["x_center"], "y": anchor["y_center"]}
+                        "module": {"text": anchor["text"], "x": anchor["x_center"], "y": anchor["y_center"]},
+                        "moduleMatch": anchor["match"].to_dict(),
                     },
                     "validation": {},
                     "confidence": 0
@@ -124,10 +135,22 @@ class SessionParser:
                     "associationEvidence": {}
                 }
                 
-                if self.module_pattern.fullmatch(anchor["text"]):
-                    session["moduleCode"] = anchor["text"]
+                module_match = anchor["match"]
+                if CANONICAL_CODE_RE.fullmatch(module_match.code):
+                    session["moduleCode"] = module_match.code
+                    session["moduleName"] = module_match.module.title if module_match.module else None
                     session["validation"]["moduleCode"] = True
                     session["confidence"] += 40
+                    if module_match.status == "unlisted":
+                        hint = f" (closest: {module_match.closest_match})" if module_match.closest_match else ""
+                        session["warnings"].append(
+                            f"Module code '{module_match.code}' is not in the module catalogue{hint}"
+                        )
+                    elif module_match.confidence < MODULE_MATCH_REVIEW_THRESHOLD:
+                        session["warnings"].append(
+                            f"Module code '{anchor['text']}' matched to '{module_match.code}' "
+                            f"(confidence {module_match.confidence}): {'; '.join(module_match.notes)}"
+                        )
                 else:
                     session["warnings"].append(f"Suspicious module code: {anchor['text']}")
                     session["validation"]["moduleCode"] = False

@@ -1,3 +1,4 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
@@ -5,12 +6,29 @@ from datetime import datetime, timezone
 import logging
 
 from crawler.models import DiscoveredDocument
-from crawler.metadata_extractor import extract_metadata
+from crawler.metadata_extractor import extract_metadata, extract_levels, extract_revision
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 TIMEOUT = 10
+
+FAS_BASE_URL = os.environ.get("FAS_BASE_URL", "https://fas.wyb.ac.lk").rstrip("/")
+TIMETABLE_URL = f"{FAS_BASE_URL}/timetables/"
+CALENDAR_URL = f"{FAS_BASE_URL}/timetables/academic-calendar/"
+WP_API_BASE = f"{FAS_BASE_URL}/wp-json/wp/v2"
+
+
+def _env_ids(name: str, default: str) -> list[int]:
+    return [int(x) for x in os.environ.get(name, default).split(",") if x.strip().isdigit()]
+
+
+# WordPress category IDs for timetable and academic-calendar notices on the FAS site.
+# Override with env vars if the faculty re-organises its categories.
+TIMETABLE_CATEGORY_IDS = _env_ids("FAS_TIMETABLE_CATEGORY_IDS", "54")
+CALENDAR_CATEGORY_IDS = _env_ids("FAS_CALENDAR_CATEGORY_IDS", "57")
+WP_MAX_PAGES = 10
+
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
 
 class SourceDiscovery:
@@ -177,7 +195,7 @@ class SourceDiscovery:
                 continue
 
             # Skip documents with unrecognised type
-            if meta["document_type"] == "unknown":
+            if not meta["document_type"]:
                 continue
 
             doc = DiscoveredDocument(
@@ -199,3 +217,156 @@ class SourceDiscovery:
             discovered.append(doc)
 
         return discovered
+
+    # ------------------------------------------------------------------
+    # WordPress REST API discovery (preferred)
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _parse_wp_date(value):
+        if not value:
+            return None
+        try:
+            return datetime.fromisoformat(value).replace(tzinfo=timezone.utc)
+        except ValueError:
+            return None
+
+    def _build_document(self, pdf_url, page_url, post_title, link_text, category_type,
+                        published_at, source_updated_at):
+        """Build a DiscoveredDocument from a notice title + PDF link text, or None to skip."""
+        post_title = (post_title or "").strip()
+        link_text = (link_text or "").strip() or pdf_url.rsplit("/", 1)[-1]
+        # The notice title carries year/semester/type; the link text often names the level
+        # ("Level 1", "Level 2") when one notice holds several PDFs.
+        if not post_title or post_title.lower() in link_text.lower():
+            title = link_text
+        elif link_text.lower() in post_title.lower():
+            title = post_title
+        else:
+            title = f"{post_title} – {link_text}"
+        if "exam" in title.lower():
+            return None
+
+        meta = extract_metadata(title)
+        link_levels = extract_levels(link_text)
+        if link_levels:
+            meta["levels"] = link_levels
+        link_revision = extract_revision(link_text)
+        if link_revision != "original":
+            meta["revision"] = link_revision
+        if not meta["document_type"]:
+            meta["document_type"] = category_type
+        if not meta["document_type"]:
+            return None
+
+        return DiscoveredDocument(
+            source_url=pdf_url,
+            source_page_url=page_url,
+            title=title,
+            link_text=link_text,
+            document_type=meta["document_type"],
+            academic_year=meta["academic_year"],
+            semester=meta["semester"],
+            levels=meta.get("levels"),
+            major=meta.get("major"),
+            programme=meta.get("programme"),
+            revision=meta["revision"],
+            published_at=published_at,
+            source_updated_at=source_updated_at,
+            discovered_at=datetime.now(timezone.utc),
+        )
+
+    def discover_from_wordpress_api(self) -> list[DiscoveredDocument]:
+        """
+        List timetable / calendar notices through the site's WordPress REST API,
+        newest first. Returns [] when the API is unavailable so the caller can
+        fall back to HTML scraping.
+        """
+        category_type = {cid: "TIMETABLE" for cid in TIMETABLE_CATEGORY_IDS}
+        category_type.update({cid: "ACADEMIC_CALENDAR" for cid in CALENDAR_CATEGORY_IDS})
+        if not category_type:
+            return []
+
+        documents = []
+        for page in range(1, WP_MAX_PAGES + 1):
+            try:
+                response = self.session.get(
+                    f"{WP_API_BASE}/posts",
+                    params={
+                        "categories": ",".join(str(c) for c in category_type),
+                        "per_page": 50,
+                        "page": page,
+                        "orderby": "modified",
+                        "order": "desc",
+                        "_fields": "link,date_gmt,modified_gmt,title,content,categories",
+                    },
+                    timeout=TIMEOUT,
+                )
+            except requests.RequestException as e:
+                logger.warning(f"WordPress API request failed: {e}")
+                break
+            # WordPress answers 400 (rest_post_invalid_page_number) past the last page.
+            if response.status_code == 400 and page > 1:
+                break
+            if not response.ok:
+                logger.warning(f"WordPress API returned HTTP {response.status_code}")
+                break
+            try:
+                posts = response.json()
+            except ValueError:
+                logger.warning("WordPress API returned non-JSON content")
+                break
+            if not isinstance(posts, list) or not posts:
+                break
+
+            for post in posts:
+                post_title = BeautifulSoup((post.get("title") or {}).get("rendered", ""), "lxml").get_text(" ", strip=True)
+                content_html = (post.get("content") or {}).get("rendered", "")
+                page_url = post.get("link") or TIMETABLE_URL
+                published_at = self._parse_wp_date(post.get("date_gmt"))
+                modified_at = self._parse_wp_date(post.get("modified_gmt"))
+                if modified_at and published_at and abs((modified_at - published_at).total_seconds()) <= 60:
+                    modified_at = None
+                cat_type = next((category_type[c] for c in post.get("categories", []) if c in category_type), None)
+
+                seen = set()
+                for a_tag in BeautifulSoup(content_html, "lxml").find_all("a", href=True):
+                    href = urljoin(page_url, a_tag["href"].strip()).split("#")[0]
+                    if not href.lower().split("?")[0].endswith(".pdf") or href in seen:
+                        continue
+                    seen.add(href)
+                    doc = self._build_document(href, page_url, post_title, a_tag.get_text(" ", strip=True),
+                                               cat_type, published_at, modified_at)
+                    if doc:
+                        documents.append(doc)
+
+            try:
+                total_pages = int(response.headers.get("X-WP-TotalPages", "1"))
+            except ValueError:
+                total_pages = 1
+            if page >= total_pages:
+                break
+        return documents
+
+    def discover_all(self) -> list[DiscoveredDocument]:
+        """
+        Discover every timetable and academic calendar on the FAS website,
+        newest first. Uses the WordPress REST API and falls back to scraping
+        the public listing pages when the API yields nothing.
+        """
+        documents = self.discover_from_wordpress_api()
+        if documents:
+            logger.info(f"WordPress API: discovered {len(documents)} documents")
+        else:
+            logger.info("WordPress API unavailable or empty; scraping listing pages")
+            documents = self.discover_documents(TIMETABLE_URL) + self.discover_documents(CALENDAR_URL)
+
+        unique = {}
+        for doc in documents:
+            unique.setdefault(doc.source_url, doc)
+
+        def recency(d):
+            ts = d.source_updated_at or d.published_at
+            return ts.timestamp() if ts else 0
+
+        return sorted(unique.values(), key=recency, reverse=True)

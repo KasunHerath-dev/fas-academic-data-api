@@ -53,6 +53,35 @@ Returns academic programmes.
 
 ### `GET /api/v1/modules`
 Returns modules with optional filtering by `level`, `major`, `programme`, and `module_code`.
+The table is filled from the module catalogue on every sync run.
+
+---
+
+## Module Catalogue
+Module titles and credits from `docs/acadamic/wusl_module_tracker.md` (Prospectus 2020/2021),
+plus timetable codes the tracker does not list (from `docs/acadamic/module-code-review.md`,
+marked `confirmed: false`, title `null` until the faculty confirms it).
+Data lives in `academic/data/`; regenerate the tracker part with
+`PYTHONPATH=. python scripts/build_module_catalogue.py`.
+
+### `GET /api/v1/catalogue/modules`
+Filters: `level` (1-4), `semester` (`1`/`2`/`I`/`II`), `subject` (`CMIS`, ...), `include_unconfirmed`.
+Year-long modules (`†` in the semester digit, e.g. `CMIS 4†18`) have `semester: "both"` and match either semester.
+
+### `GET /api/v1/catalogue/modules/resolve?code=...`
+Resolves raw or OCR-damaged text to the closest module:
+
+| Input | `code` | `status` |
+|---|---|---|
+| `CMIS 2123` | `CMIS 2123` | `exact` |
+| `MIS 4142` | `CMIS 4142` | `normalized` (prefix letter dropped by OCR) |
+| `IMGT 3+34`, `IMGT 3ᵻ34` | `IMGT 3†34` | `normalized` (dagger misread) |
+| `cmis2123`, `CMIS 2l23` | `CMIS 2123` | `normalized` |
+| `MATH 1113` | `MATH 1113` | `unlisted`, `closest_match: MATH 1112` |
+| `Business English` | `Business English` | `named_course` (non-credit) |
+
+A well-formed code missing from the catalogue is **never rewritten**; only `closest_match` is suggested.
+Unresolvable text returns `404`.
 
 ---
 
@@ -64,12 +93,22 @@ Returns structured timetable sessions from stored academic data.
 
 **Filtering:**
 - `academic_year`
-- `semester`
-- `level`
+- `semester` — `1`, `2`, `I` or `II`
+- `level` — also matches combined timetables stored as `2,3`
 - `major`
 - `programme`
-- `module_code`
+- `module_code` — OCR variants (`MIS 4142`, `IMGT 3+34`) resolve to the canonical code
+- `subject` — subject prefix, e.g. `CMIS`
 - `day_of_week`
+
+Sessions are returned Monday → Sunday in timetable order.
+
+**Module fields on each session:**
+- `module_code` — canonical code (`CMIS 4142`, `IMGT 3†34`)
+- `raw_module_code` — exactly as read from the PDF
+- `module_name`, `credits`, `subject`, `year_long`, `non_credit` — from the module catalogue
+- `module_match` — `status`, `confidence`, `in_catalogue`, `catalogue_confirmed`, `closest_match`, `notes`
+- `session_type` — `L`, `T` or `P`
 
 **Note:** Nullable values may occur because the source document may not contain a deterministic value (e.g., missing room names).
 
@@ -78,9 +117,10 @@ Resolves the active timetable using the existing version-management rules.
 
 **Version Resolution Rules:**
 1. `re-revised`
-2. `revised`
-3. `original`
-4. `unknown`/draft
+2. numbered revisions (`revised-2` for "Revised 02", ...)
+3. `revised`
+4. `original`
+5. `unknown`/draft
 *Tie-breaking:* newest `first_seen_at`, then highest `document_id`.
 
 **Document Lineage:**

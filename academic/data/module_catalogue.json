@@ -1,0 +1,895 @@
+{
+  "modules": [
+    {
+      "code": "CMIS 1113",
+      "title": "Introduction to Computers and Operating Systems",
+      "credits": 3,
+      "level": 1,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 1123",
+      "title": "Computer Programming I",
+      "credits": 3,
+      "level": 1,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 1131",
+      "title": "Practical Computing I",
+      "credits": 1,
+      "level": 1,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 1112",
+      "title": "Fundamentals of Electricity and Magnetism",
+      "credits": 2,
+      "level": 1,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 1122",
+      "title": "Introduction to Semiconductors",
+      "credits": 2,
+      "level": 1,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 1132",
+      "title": "Basic Digital Electronics",
+      "credits": 2,
+      "level": 1,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MATH 1112",
+      "title": "Introduction to Mathematics I",
+      "credits": 2,
+      "level": 1,
+      "semester": "I",
+      "subject": "MATH",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 1113",
+      "title": "Introduction to Probability and Statistics I",
+      "credits": 3,
+      "level": 1,
+      "semester": "I",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 1112",
+      "title": "Principles of Management",
+      "credits": 2,
+      "level": 1,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 1122",
+      "title": "Business Economics",
+      "credits": 2,
+      "level": 1,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 1132",
+      "title": "Entrepreneurial Dynamics",
+      "credits": 2,
+      "level": 1,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 1212",
+      "title": "Computer Programming II",
+      "credits": 2,
+      "level": 1,
+      "semester": "II",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 1221",
+      "title": "Practical Computing II",
+      "credits": 1,
+      "level": 1,
+      "semester": "II",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 1212",
+      "title": "Basic Electronics - Lab",
+      "credits": 2,
+      "level": 1,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 1222",
+      "title": "General Physics",
+      "credits": 2,
+      "level": 1,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MATH 1212",
+      "title": "Introduction to Mathematics II",
+      "credits": 2,
+      "level": 1,
+      "semester": "II",
+      "subject": "MATH",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MATH 1222",
+      "title": "Differential Equations",
+      "credits": 2,
+      "level": 1,
+      "semester": "II",
+      "subject": "MATH",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 1213",
+      "title": "Introduction to Probability and Statistics II",
+      "credits": 3,
+      "level": 1,
+      "semester": "II",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 1212",
+      "title": "Principles of Accounting",
+      "credits": 2,
+      "level": 1,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 1222",
+      "title": "Marketing Management",
+      "credits": 2,
+      "level": 1,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 2113",
+      "title": "Object-oriented Programming",
+      "credits": 3,
+      "level": 2,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 2123",
+      "title": "Database Management Systems",
+      "credits": 3,
+      "level": 2,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 2112",
+      "title": "Electricity and Magnetism",
+      "credits": 2,
+      "level": 2,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 2121",
+      "title": "Electricity and Magnetism - Lab",
+      "credits": 1,
+      "level": 2,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MATH 2114",
+      "title": "Linear Algebra I",
+      "credits": 4,
+      "level": 2,
+      "semester": "I",
+      "subject": "MATH",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 2112",
+      "title": "Statistical Inference I",
+      "credits": 2,
+      "level": 2,
+      "semester": "I",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 2112",
+      "title": "Operations Management I",
+      "credits": 2,
+      "level": 2,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 2122",
+      "title": "Cost & Management Accounting",
+      "credits": 2,
+      "level": 2,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 2132",
+      "title": "Service Industry Concepts",
+      "credits": 2,
+      "level": 2,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 2214",
+      "title": "Data Structures & Analysis of Algorithms",
+      "credits": 4,
+      "level": 2,
+      "semester": "II",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 2213",
+      "title": "Semiconductor Devices",
+      "credits": 3,
+      "level": 2,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 2221",
+      "title": "Semiconductor Devices - Lab",
+      "credits": 1,
+      "level": 2,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 2232",
+      "title": "Analogue Electronics",
+      "credits": 2,
+      "level": 2,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 2241",
+      "title": "Analogue Electronics - Lab",
+      "credits": 1,
+      "level": 2,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MATH 2213",
+      "title": "Linear Algebra II",
+      "credits": 3,
+      "level": 2,
+      "semester": "II",
+      "subject": "MATH",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 2212",
+      "title": "Design of Experiments",
+      "credits": 2,
+      "level": 2,
+      "semester": "II",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 2222",
+      "title": "Regression Analysis",
+      "credits": 2,
+      "level": 2,
+      "semester": "II",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 2212",
+      "title": "Human Resource Management",
+      "credits": 2,
+      "level": 2,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 2222",
+      "title": "Operations Research I",
+      "credits": 2,
+      "level": 2,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 3114",
+      "title": "Data Communication & Computer Networks",
+      "credits": 4,
+      "level": 3,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 3122",
+      "title": "Rapid Application Development",
+      "credits": 2,
+      "level": 3,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 3134",
+      "title": "Computer Architecture & Compiler Design",
+      "credits": 4,
+      "level": 3,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 3142",
+      "title": "Computational Methods",
+      "credits": 2,
+      "level": 3,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 3153",
+      "title": "Advanced Database Systems",
+      "credits": 3,
+      "level": 3,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 3113",
+      "title": "Digital Electronics",
+      "credits": 3,
+      "level": 3,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 3121",
+      "title": "Digital Electronics - Lab",
+      "credits": 1,
+      "level": 3,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 3133",
+      "title": "Data Acquisition and Signal Processing",
+      "credits": 3,
+      "level": 3,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 3141",
+      "title": "Data Acquisition and Signal Processing – Lab",
+      "credits": 1,
+      "level": 3,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MMOD 3113",
+      "title": "Mathematical Methods",
+      "credits": 3,
+      "level": 3,
+      "semester": "I",
+      "subject": "MMOD",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MMOD 3124",
+      "title": "Mathematical Models",
+      "credits": 4,
+      "level": 3,
+      "semester": "I",
+      "subject": "MMOD",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 3112",
+      "title": "Statistical Inference II",
+      "credits": 2,
+      "level": 3,
+      "semester": "I",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 3124",
+      "title": "Time Series Analysis",
+      "credits": 4,
+      "level": 3,
+      "semester": "I",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 3112",
+      "title": "Operations Management II",
+      "credits": 2,
+      "level": 3,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 3122",
+      "title": "Organization Development",
+      "credits": 2,
+      "level": 3,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 3162",
+      "title": "Business & Industrial Law",
+      "credits": 2,
+      "level": 3,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 3214",
+      "title": "Software Engineering",
+      "credits": 4,
+      "level": 3,
+      "semester": "II",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 3224",
+      "title": "Web Designing and e-commerce",
+      "credits": 4,
+      "level": 3,
+      "semester": "II",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 3234",
+      "title": "Computer Graphics and Visualization",
+      "credits": 4,
+      "level": 3,
+      "semester": "II",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 3242",
+      "title": "Mobile and Ubiquitous Computing",
+      "credits": 2,
+      "level": 3,
+      "semester": "II",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 3253",
+      "title": "Data Mining",
+      "credits": 3,
+      "level": 3,
+      "semester": "II",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 3212",
+      "title": "AC Theory",
+      "credits": 2,
+      "level": 3,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 3222",
+      "title": "Scientific Writing",
+      "credits": 2,
+      "level": 3,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 3233",
+      "title": "Microprocessor and Microcontroller Technology",
+      "credits": 3,
+      "level": 3,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 3241",
+      "title": "Microprocessor and Microcontroller Technology - Lab",
+      "credits": 1,
+      "level": 3,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MMOD 3214",
+      "title": "Numerical Methods",
+      "credits": 4,
+      "level": 3,
+      "semester": "II",
+      "subject": "MMOD",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 3212",
+      "title": "Statistical Techniques",
+      "credits": 2,
+      "level": 3,
+      "semester": "II",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 3223",
+      "title": "Operations Research",
+      "credits": 3,
+      "level": 3,
+      "semester": "II",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 3232",
+      "title": "Data Analysis & Preparation of Statistical Reports",
+      "credits": 2,
+      "level": 3,
+      "semester": "II",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 3212",
+      "title": "Operations Research II",
+      "credits": 2,
+      "level": 3,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 3222",
+      "title": "Management of Technology",
+      "credits": 2,
+      "level": 3,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 3232",
+      "title": "International Business",
+      "credits": 2,
+      "level": 3,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 4114",
+      "title": "Artificial Intelligence",
+      "credits": 4,
+      "level": 4,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 4123",
+      "title": "Advanced Operating Systems",
+      "credits": 3,
+      "level": 4,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 4134",
+      "title": "Distributed and Cloud Computing",
+      "credits": 4,
+      "level": 4,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 4142",
+      "title": "Image Processing",
+      "credits": 2,
+      "level": 4,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 4153",
+      "title": "Parallel Computing",
+      "credits": 3,
+      "level": 4,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 4†18",
+      "title": "Research Project (Special)",
+      "credits": 8,
+      "level": 4,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 4†26",
+      "title": "Research Project (Joint Major)",
+      "credits": 6,
+      "level": 4,
+      "semester": "I",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 4114",
+      "title": "Communication Theory and Systems",
+      "credits": 4,
+      "level": 4,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 4143",
+      "title": "Programmable Logic Devices",
+      "credits": 3,
+      "level": 4,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 4151",
+      "title": "Programmable Logic Devices - Lab",
+      "credits": 1,
+      "level": 4,
+      "semester": "I",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MATH 4114",
+      "title": "Complex Variables",
+      "credits": 4,
+      "level": 4,
+      "semester": "I",
+      "subject": "MATH",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 4114",
+      "title": "Stochastic Processes",
+      "credits": 4,
+      "level": 4,
+      "semester": "I",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "STAT 4134",
+      "title": "Actuarial Mathematics",
+      "credits": 4,
+      "level": 4,
+      "semester": "I",
+      "subject": "STAT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 4123",
+      "title": "Environmental Management based on ISO 14001",
+      "credits": 3,
+      "level": 4,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 4133",
+      "title": "Computer based Modelling & Simulation",
+      "credits": 3,
+      "level": 4,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 4142",
+      "title": "Supply Chain Management",
+      "credits": 2,
+      "level": 4,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 4152",
+      "title": "Productivity Techniques",
+      "credits": 2,
+      "level": 4,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 4162",
+      "title": "Financial Management",
+      "credits": 2,
+      "level": 4,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 4172",
+      "title": "Strategic Management",
+      "credits": 2,
+      "level": 4,
+      "semester": "I",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "CMIS 4216",
+      "title": "Industrial Training (Special)",
+      "credits": 6,
+      "level": 4,
+      "semester": "II",
+      "subject": "CMIS",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "INDT 4216",
+      "title": "Industrial Training (General/Joint Major)",
+      "credits": 6,
+      "level": 4,
+      "semester": "II",
+      "subject": "INDT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "ELTN 4213",
+      "title": "Digital Signal Processing",
+      "credits": 3,
+      "level": 4,
+      "semester": "II",
+      "subject": "ELTN",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MATH 4214",
+      "title": "Partial Differential Equations",
+      "credits": 4,
+      "level": 4,
+      "semester": "II",
+      "subject": "MATH",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "MATH 4224",
+      "title": "Measure Theory",
+      "credits": 4,
+      "level": 4,
+      "semester": "II",
+      "subject": "MATH",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 4213",
+      "title": "Advanced Marketing Management",
+      "credits": 3,
+      "level": 4,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 4222",
+      "title": "Applied Econometrics",
+      "credits": 2,
+      "level": 4,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 4234",
+      "title": "Advanced Operations Research",
+      "credits": 4,
+      "level": 4,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    },
+    {
+      "code": "IMGT 4242",
+      "title": "Strategic Business Analysis",
+      "credits": 2,
+      "level": 4,
+      "semester": "II",
+      "subject": "IMGT",
+      "source": "wusl_module_tracker.md (Prospectus 2020/2021)"
+    }
+  ]
+}

@@ -29,7 +29,7 @@ def test_dry_run_is_fully_isolated(
     mock_doc.url = "http://test"
     mock_doc.source_url = "http://test.pdf"
 
-    mock_discovery.discover_documents.return_value = [mock_doc]
+    mock_discovery.discover_all.return_value = [mock_doc]
 
     mock_download.return_value = "/tmp/test.pdf"
     mock_calc_hash.return_value = "fakehash"
@@ -72,7 +72,7 @@ def test_dry_run_cleans_up_on_failure(
     mock_doc = MagicMock()
     mock_doc.title = "Test Doc"
     mock_doc.document_type = "TIMETABLE"
-    mock_discovery.discover_documents.return_value = [mock_doc]
+    mock_discovery.discover_all.return_value = [mock_doc]
 
     mock_download.return_value = "/tmp/fail.pdf"
 

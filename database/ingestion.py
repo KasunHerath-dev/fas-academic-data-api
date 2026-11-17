@@ -112,15 +112,21 @@ def ingest_timetable_pdf(db: Session, temp_pdf_path: str, document_metadata: dic
                 major=parsed_session.major or doc.major,
                 programme=parsed_session.programme or doc.programme,
                 module_code=parsed_session.module_code,
-                raw_module_code=parsed_session.raw_evidence.get("rawText"), # Preserve raw where appropriate
+                # Keep the text exactly as read from the PDF; module_code holds the repaired code.
+                raw_module_code=parsed_session.raw_module_code or parsed_session.module_code,
                 day=parsed_session.day,
                 start_time=parsed_session.start_time,
                 end_time=parsed_session.end_time,
-                duration_minutes=parsed_session.raw_evidence.get("durationMinutes"), # Will be None if missing, can also calc
+                duration_minutes=parsed_session.duration_minutes,
                 class_type=parsed_session.session_type,
                 group=parsed_session.group,
+                raw_group=parsed_session.raw_group,
                 room=parsed_session.room,
+                raw_room=parsed_session.raw_room,
                 time_source=parsed_session.time_source,
+                time_inference_reason=parsed_session.time_inference_reason,
+                confidence=parsed_session.confidence,
+                source_cells=parsed_session.source_cells,
                 verification_status=session_val_res.status.value.lower(),
                 raw_evidence=parsed_session.raw_evidence,
                 warnings=session_val_res.warnings

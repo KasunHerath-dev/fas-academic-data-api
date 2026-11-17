@@ -3,6 +3,7 @@ from typing import List, Dict, Any, Optional
 from enum import Enum
 from pydantic import BaseModel
 
+from academic.modules import CANONICAL_CODE_RE, is_named_course
 from parser.src.api import ParsedTimetable, ParsedSession
 
 class ValidationStatus(Enum):
@@ -86,9 +87,10 @@ class TimetableValidator:
         if not session.module_code:
             errors.append("Empty module code")
         else:
-            # Check for suspicious OCR (e.g. ELTN 3+53 instead of 3153)
-            # A typical FAS module code is like 'ELTN 2112' or 'MATH 1122'
-            if "+" in session.module_code or "=" in session.module_code or re.search(r'[^\w\s-]', session.module_code):
+            # Canonical FAS codes look like 'ELTN 2112', or 'CMIS 4†18' for year-long
+            # modules. OCR damage (ELTN 3+53, MIS 4142) is repaired by the parser via
+            # academic.modules.match_module_code; anything still off-pattern is flagged.
+            if not CANONICAL_CODE_RE.fullmatch(session.module_code) and not is_named_course(session.module_code):
                 warnings.append(f"Suspicious module code OCR: '{session.module_code}'")
                 
         # 5. Room Normalization/Validation

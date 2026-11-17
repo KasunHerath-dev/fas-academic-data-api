@@ -9,7 +9,8 @@ from sqlalchemy.orm import Session
 
 from database.database import SessionLocal
 from database.models.models import SyncRun
-from crawler.source_discovery import SourceDiscovery
+from crawler.source_discovery import SourceDiscovery, TIMETABLE_URL, CALENDAR_URL
+from crawler.models import DiscoveredDocument
 from crawler.pdf_lifecycle import managed_pdf_lifecycle
 from crawler.change_detector import ChangeStatus
 from database.ingestion import ingest_timetable_pdf
@@ -21,12 +22,35 @@ from parser.src.validator import TimetableValidator
 from parser.calendar.api import parse_academic_calendar
 from parser.calendar.ocr_extractor import extract_calendar_data
 from parser.calendar.validator import CalendarValidator
+from database.module_catalogue import sync_module_catalogue
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-TIMETABLE_URL = "https://fas.wyb.ac.lk/timetables/"
-CALENDAR_URL = "https://fas.wyb.ac.lk/timetables/academic-calendar/"
+
+
+def build_document_metadata(doc: DiscoveredDocument, sha256: str) -> dict:
+    """Map a discovered document to the metadata dict the ingestion functions expect."""
+    return {
+        "source_url": doc.source_url,
+        "title": doc.title,
+        "document_type": doc.document_type,
+        "academic_year": doc.academic_year,
+        "semester": doc.semester,
+        # Combined timetables cover several levels; store them as "2,3".
+        "level": ",".join(str(l) for l in doc.levels) if doc.levels else None,
+        "major": doc.major,
+        "programme": doc.programme,
+        "revision": doc.revision,
+        "published_at": doc.published_at,
+        "source_updated_at": doc.source_updated_at,
+        "sha256": sha256,
+    }
+
+
+def discover(crawler: SourceDiscovery) -> list[DiscoveredDocument]:
+    logger.info(f"Discovering timetables and academic calendars ({TIMETABLE_URL}, {CALENDAR_URL})")
+    return crawler.discover_all()
 
 def initialize_sync_run(db: Session, dry_run: bool) -> SyncRun:
     sync_run = SyncRun(
@@ -61,12 +85,7 @@ def run_sync(dry_run: bool = False):
     discovered_documents = []
 
     try:
-        logger.info(f"Discovering timetables from {TIMETABLE_URL}")
-        discovered_documents.extend(crawler.discover_documents(TIMETABLE_URL))
-
-        logger.info(f"Discovering academic calendars from {CALENDAR_URL}")
-        discovered_documents.extend(crawler.discover_documents(CALENDAR_URL))
-
+        discovered_documents.extend(discover(crawler))
     except Exception as e:
         logger.error(f"Source discovery failed: {e}")
         finalize_sync_run(db, sync_run, dry_run, status="failed", error_summary="Source discovery failed.")
@@ -76,7 +95,7 @@ def run_sync(dry_run: bool = False):
     sync_run.documents_checked = len(discovered_documents)
 
     for doc in discovered_documents:
-        logger.info(f"Processing document: {doc.title} ({doc.url})")
+        logger.info(f"Processing document: {doc.title} ({doc.source_url})")
 
         try:
             with managed_pdf_lifecycle(db, doc) as lifecycle_result:
@@ -104,18 +123,7 @@ def run_sync(dry_run: bool = False):
                     continue
 
                 # Ingestion
-                metadata = {
-                    "source_url": doc.url,
-                    "title": doc.title,
-                    "document_type": doc.document_type,
-                    "academic_year": doc.academic_year,
-                    "semester": doc.semester,
-                    "level": doc.level,
-                    "revision": doc.revision,
-                    "published_at": doc.published_at,
-                    "source_updated_at": getattr(doc, 'source_updated_at', None),
-                    "sha256": lifecycle_result.sha256
-                }
+                metadata = build_document_metadata(doc, lifecycle_result.sha256)
 
                 if doc.document_type == "TIMETABLE":
                     ingest_result = ingest_timetable_pdf(db, lifecycle_result.temp_path, metadata)
@@ -136,6 +144,14 @@ def run_sync(dry_run: bool = False):
         except Exception as e:
             logger.error(f"Unexpected error processing {doc.title}: {e}")
             sync_run.documents_failed += 1
+
+    if not dry_run:
+        try:
+            added = sync_module_catalogue(db)
+            logger.info(f"Module catalogue synced ({added} new modules)")
+        except Exception as e:
+            db.rollback()
+            logger.error(f"Module catalogue sync failed: {e}")
 
     final_status = "success"
     if sync_run.documents_failed > 0:
@@ -171,7 +187,7 @@ def run_sync(dry_run: bool = False):
         try:
             with open(summary_file, "a") as sf:
                 sf.write(summary)
-        except:
+        except OSError:
             pass
 
 
@@ -185,12 +201,7 @@ def run_dry_run():
     discovered_documents = []
 
     try:
-        logger.info(f"Discovering timetables from {TIMETABLE_URL}")
-        discovered_documents.extend(crawler.discover_documents(TIMETABLE_URL))
-
-        logger.info(f"Discovering academic calendars from {CALENDAR_URL}")
-        discovered_documents.extend(crawler.discover_documents(CALENDAR_URL))
-
+        discovered_documents.extend(discover(crawler))
     except Exception as e:
         logger.error(f"Source discovery failed: {e}")
         sys.exit(1)
@@ -203,7 +214,7 @@ def run_dry_run():
     cal_val = CalendarValidator()
 
     for doc in discovered_documents:
-        logger.info(f"Processing document: {doc.title} ({doc.url})")
+        logger.info(f"Processing document: {doc.title} ({doc.source_url})")
         temp_path = None
         try:
             temp_path = download_temporary_pdf(doc.source_url)

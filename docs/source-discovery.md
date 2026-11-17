@@ -6,11 +6,18 @@ The FAS Academic Data API relies strictly on the official Wayamba University FAS
 - **Academic Calendars:** `https://fas.wyb.ac.lk/timetables/academic-calendar/`
 
 ## Discovery Flow
-1. Fetch the source HTML page via standard HTTP GET (with reasonable timeouts and a standard user-agent).
-2. Parse the HTML for `<a>` tags with `href` attributes ending in `.pdf`.
-3. Normalize the URLs (make absolute, remove fragments).
-4. Deduplicate links using the normalized URL.
-5. Extract metadata from the link text (which acts as the document title).
+`SourceDiscovery.discover_all()` is the entry point used by the sync job.
+
+1. **WordPress REST API (preferred).** `GET /wp-json/wp/v2/posts?categories=<ids>&orderby=modified`,
+   paginated via `X-WP-TotalPages`. Every PDF link in a notice becomes one document. The notice
+   title gives type/year/semester/revision; the link text (e.g. "Level 2 & 3") overrides the levels.
+   Post `date_gmt` → `published_at`, `modified_gmt` → `source_updated_at`.
+   Category IDs default to `54` (timetables) and `57` (calendars); override with
+   `FAS_TIMETABLE_CATEGORY_IDS` / `FAS_CALENDAR_CATEGORY_IDS`. `FAS_BASE_URL` overrides the site.
+2. **HTML fallback.** If the API returns nothing, the listing pages below are scraped as before:
+   follow each notice link, take the first PDF and the `<time>` / `article:modified_time` dates.
+3. Deduplicate by PDF URL and return newest first, so the latest documents are processed first.
+4. Exam timetables and titles that are neither a timetable nor a calendar are skipped.
 
 ## Metadata Extraction Rules
 Metadata extraction relies on regex parsing of the document title. We strictly do not invent metadata. If a field cannot be derived deterministically, it is set to `null`/unknown, leaving the raw title as evidence.
@@ -21,7 +28,7 @@ Metadata extraction relies on regex parsing of the document title. We strictly d
 - **Academic Year:** Extracted from formats like "2024/2025" or "2024-2025".
 - **Semester:** Extracted looking for "Semester I", "Semester II", etc.
 - **Levels:** Extracts digits trailing the word "Level" (e.g., "Level 1,2,3 & 4").
-- **Revision:** "Re-revised" or "Revised". Defaults to "original".
+- **Revision:** "Re-revised", "Revised", or numbered ("Revised 02", "2nd Revised" → `revised-2`). Defaults to "original".
 
 ### Unknown Metadata Behavior
 If metadata cannot be identified, fields remain `None` and the raw link text is preserved in `title`.

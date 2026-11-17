@@ -34,8 +34,8 @@ jobs:
       - name: Install system dependencies (OCR)
         run: |
           sudo apt-get update
-          sudo apt-get install -y tesseract-ocr
-          # Add any other required OCR/PDF packages if needed, e.g. libgl1 for cv2
+          # tesseract for OCR, poppler-utils for pdf2image (calendar PDFs)
+          sudo apt-get install -y tesseract-ocr poppler-utils
 
       - name: Install Python dependencies
         run: |
@@ -58,8 +58,10 @@ jobs:
             DRY_RUN_FLAG="--dry-run"
           fi
           
-          PYTHONPATH=. python scripts/run_academic_data_sync.py $DRY_RUN_FLAG > sync_output.log 2>&1
-          SYNC_EXIT_CODE=$?
+          # The step shell runs with `bash -e`; capture the exit code instead of
+          # aborting here, so the log below is always printed.
+          SYNC_EXIT_CODE=0
+          PYTHONPATH=. python scripts/run_academic_data_sync.py $DRY_RUN_FLAG > sync_output.log 2>&1 || SYNC_EXIT_CODE=$?
           
           # Print the log for GH Actions runner output
           cat sync_output.log

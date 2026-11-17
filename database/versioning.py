@@ -1,7 +1,8 @@
 import logging
+import re
 from typing import Optional, List
 from sqlalchemy.orm import Session
-from sqlalchemy import desc
+from sqlalchemy import desc, or_
 from database.models.models import Document
 
 logger = logging.getLogger(__name__)
@@ -22,7 +23,37 @@ def get_revision_score(revision: Optional[str]) -> int:
     """
     if not revision:
         return DEFAULT_REVISION_PRIORITY
-    return REVISION_PRIORITY.get(revision.lower(), DEFAULT_REVISION_PRIORITY)
+    rev = revision.lower().strip()
+    if rev in REVISION_PRIORITY:
+        return REVISION_PRIORITY[rev]
+    # Numbered revisions from titles like "Revised 02": revised-2 ranks above revised
+    # and below re-revised (the faculty uses one scheme or the other per document).
+    m = re.fullmatch(r"revised-(\d{1,2})", rev)
+    if m:
+        return REVISION_PRIORITY["revised"] + min(int(m.group(1)), 9)
+    return DEFAULT_REVISION_PRIORITY
+
+
+def level_filter(column, level: str):
+    """
+    Match a level against a column that may hold one level ('2') or a
+    comma-separated list for combined timetables ('2,3').
+    """
+    level = str(level).strip()
+    return or_(
+        column == level,
+        column.like(f"{level},%"),
+        column.like(f"%,{level}"),
+        column.like(f"%,{level},%"),
+    )
+
+
+def semester_values(semester: str) -> list[str]:
+    """Accept '1'/'I'/'Semester I' and match either stored form."""
+    from academic.modules import normalize_semester
+    roman = normalize_semester(semester)
+    numeric = {"I": "1", "II": "2"}.get(roman)
+    return [v for v in {str(semester).strip(), roman, numeric} if v]
 
 def get_latest_document(
     db: Session,
@@ -50,9 +81,9 @@ def get_latest_document(
     )
     
     if semester:
-        query = query.filter(Document.semester == semester)
+        query = query.filter(Document.semester.in_(semester_values(semester)))
     if level:
-        query = query.filter(Document.level == level)
+        query = query.filter(level_filter(Document.level, level))
     if major:
         query = query.filter(Document.major == major)
     if programme:
@@ -92,9 +123,9 @@ def get_document_versions(
     )
     
     if semester:
-        query = query.filter(Document.semester == semester)
+        query = query.filter(Document.semester.in_(semester_values(semester)))
     if level:
-        query = query.filter(Document.level == level)
+        query = query.filter(level_filter(Document.level, level))
     if major:
         query = query.filter(Document.major == major)
     if programme:

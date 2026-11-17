@@ -14,12 +14,19 @@ class ParsedSession(BaseModel):
     start_time: str
     end_time: str
     module_code: Optional[str]
+    raw_module_code: Optional[str] = None
     module_name: Optional[str] = None
     session_type: Optional[str] = None
     room: Optional[str] = None
     group: Optional[str] = None
     major: Optional[str] = None
     programme: Optional[str] = None
+    raw_room: Optional[str] = None
+    raw_group: Optional[str] = None
+    duration_minutes: Optional[int] = None
+    confidence: Optional[int] = None
+    source_cells: Optional[List[Dict[str, Any]]] = None
+    time_inference_reason: Optional[str] = None
     raw_evidence: Dict[str, Any]
     time_source: str
     verification_status: str
@@ -93,9 +100,17 @@ def parse_timetable(pdf_path: str) -> ParsedTimetable:
                 start_time=s["startTime"],
                 end_time=s["endTime"],
                 module_code=s.get("moduleCode") or s.get("rawModuleCode"),
+                raw_module_code=s.get("rawModuleCode"),
+                module_name=s.get("moduleName"),
                 session_type=s.get("classType"),
                 room=s.get("room"),
                 group=s.get("group"),
+                raw_room=s.get("rawRoom"),
+                raw_group=s.get("rawGroup"),
+                duration_minutes=s.get("durationMinutes"),
+                confidence=s.get("confidence"),
+                source_cells=s.get("sourceCells"),
+                time_inference_reason=s.get("timeInferenceReason"),
                 raw_evidence=s.get("rawEvidence", {}),
                 time_source=s.get("timeSource", "inferred"),
                 verification_status=status,
