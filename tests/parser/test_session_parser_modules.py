@@ -106,7 +106,8 @@ def test_elpc_english_course_without_session_type_is_not_flagged():
         sessions, _ = SessionParser().parse_sessions([cell])
         assert len(sessions) == 1
         s = sessions[0]
-        assert s["moduleCode"] == f"ELPC {body[0]}†{body[2:]}"
+        assert s["moduleCode"] == ("ELPC I" if body[0] == "1" else "ELPC II")
+        assert s["rawModuleCode"] == f"ELPC {body}"
         assert s["moduleName"].startswith("English Language Proficiency Course")
         assert s["warnings"] == []
         parsed.append(ParsedSession(

@@ -1,30 +1,205 @@
 {
-  "_comment": "Hand-curated entries from docs/acadamic/module-code-review.md. Codes here appear in official timetables but not in the 2020/2021 module tracker. Titles marked null are unconfirmed; do not invent them. 'confirmed' is false until the faculty or a newer prospectus confirms the entry.",
+  "_comment": "Hand-curated entries from docs/acadamic/module-code-review.md. Codes here appear in official timetables but not in the 2020/2021 module tracker. Titles marked null are unconfirmed; do not invent them. 'confirmed' is false until the faculty or a newer prospectus confirms the entry. The English Language Proficiency Course has no numeric code in the tracker or flow doc; it is identified by level as ELPC I / ELPC II (paired with the ELPT I / ELPT II tests). Timetable codes such as ELPC 1+10 / ELPC 2+20 resolve to these.",
   "modules": [
-    {"code": "ELPC 1†10", "title": "English Language Proficiency Course I", "credits": 0, "level": 1, "semester": "both", "subject": "ELPC", "non_credit": true, "confirmed": false},
-    {"code": "ELPC 2†20", "title": "English Language Proficiency Course II", "credits": 0, "level": 2, "semester": "both", "subject": "ELPC", "non_credit": true, "confirmed": false},
-    {"code": "ELTN 3†53", "title": null, "credits": 3, "level": 3, "semester": "both", "subject": "ELTN", "confirmed": false},
-    {"code": "IMGT 3†34", "title": null, "credits": 4, "level": 3, "semester": "both", "subject": "IMGT", "confirmed": false},
-    {"code": "ELTN 4†63", "title": null, "credits": 3, "level": 4, "semester": "both", "subject": "ELTN", "confirmed": false},
-    {"code": "ELTN 4†78", "title": null, "credits": 8, "level": 4, "semester": "both", "subject": "ELTN", "confirmed": false},
-    {"code": "ELTN 4†86", "title": null, "credits": 6, "level": 4, "semester": "both", "subject": "ELTN", "confirmed": false},
-    {"code": "ELTN 4†92", "title": null, "credits": 2, "level": 4, "semester": "both", "subject": "ELTN", "confirmed": false},
-    {"code": "IMGT 4†06", "title": null, "credits": 6, "level": 4, "semester": "both", "subject": "IMGT", "confirmed": false},
-    {"code": "CMIS 3124", "title": null, "credits": 4, "level": 3, "semester": "I", "subject": "CMIS", "confirmed": false},
-    {"code": "IMGT 4163", "title": null, "credits": 3, "level": 4, "semester": "I", "subject": "IMGT", "confirmed": false},
-    {"code": "MATH 3114", "title": null, "credits": 4, "level": 3, "semester": "I", "subject": "MATH", "confirmed": false},
-    {"code": "IMGT 3142", "title": null, "credits": 2, "level": 3, "semester": "I", "subject": "IMGT", "confirmed": false},
-    {"code": "IMGT 3152", "title": null, "credits": 2, "level": 3, "semester": "I", "subject": "IMGT", "confirmed": false},
-    {"code": "IMGT 3172", "title": null, "credits": 2, "level": 3, "semester": "I", "subject": "IMGT", "confirmed": false},
-    {"code": "ELTN 4122", "title": null, "credits": 2, "level": 4, "semester": "I", "subject": "ELTN", "confirmed": false},
-    {"code": "ELTN 4131", "title": null, "credits": 1, "level": 4, "semester": "I", "subject": "ELTN", "confirmed": false},
-    {"code": "IMGT 4184", "title": null, "credits": 4, "level": 4, "semester": "I", "subject": "IMGT", "confirmed": false},
-    {"code": "IMGT 4192", "title": null, "credits": 2, "level": 4, "semester": "I", "subject": "IMGT", "confirmed": false},
-    {"code": "STAT 4124", "title": null, "credits": 4, "level": 4, "semester": "I", "subject": "STAT", "confirmed": false}
+    {
+      "code": "ELPC I",
+      "title": "English Language Proficiency Course I",
+      "credits": 0,
+      "level": 1,
+      "semester": "both",
+      "subject": "ELPC",
+      "non_credit": true,
+      "confirmed": false
+    },
+    {
+      "code": "ELPC II",
+      "title": "English Language Proficiency Course II",
+      "credits": 0,
+      "level": 2,
+      "semester": "both",
+      "subject": "ELPC",
+      "non_credit": true,
+      "confirmed": false
+    },
+    {
+      "code": "ELTN 3†53",
+      "title": null,
+      "credits": 3,
+      "level": 3,
+      "semester": "both",
+      "subject": "ELTN",
+      "confirmed": false
+    },
+    {
+      "code": "IMGT 3†34",
+      "title": null,
+      "credits": 4,
+      "level": 3,
+      "semester": "both",
+      "subject": "IMGT",
+      "confirmed": false
+    },
+    {
+      "code": "ELTN 4†63",
+      "title": null,
+      "credits": 3,
+      "level": 4,
+      "semester": "both",
+      "subject": "ELTN",
+      "confirmed": false
+    },
+    {
+      "code": "ELTN 4†78",
+      "title": null,
+      "credits": 8,
+      "level": 4,
+      "semester": "both",
+      "subject": "ELTN",
+      "confirmed": false
+    },
+    {
+      "code": "ELTN 4†86",
+      "title": null,
+      "credits": 6,
+      "level": 4,
+      "semester": "both",
+      "subject": "ELTN",
+      "confirmed": false
+    },
+    {
+      "code": "ELTN 4†92",
+      "title": null,
+      "credits": 2,
+      "level": 4,
+      "semester": "both",
+      "subject": "ELTN",
+      "confirmed": false
+    },
+    {
+      "code": "IMGT 4†06",
+      "title": null,
+      "credits": 6,
+      "level": 4,
+      "semester": "both",
+      "subject": "IMGT",
+      "confirmed": false
+    },
+    {
+      "code": "CMIS 3124",
+      "title": null,
+      "credits": 4,
+      "level": 3,
+      "semester": "I",
+      "subject": "CMIS",
+      "confirmed": false
+    },
+    {
+      "code": "IMGT 4163",
+      "title": null,
+      "credits": 3,
+      "level": 4,
+      "semester": "I",
+      "subject": "IMGT",
+      "confirmed": false
+    },
+    {
+      "code": "MATH 3114",
+      "title": null,
+      "credits": 4,
+      "level": 3,
+      "semester": "I",
+      "subject": "MATH",
+      "confirmed": false
+    },
+    {
+      "code": "IMGT 3142",
+      "title": null,
+      "credits": 2,
+      "level": 3,
+      "semester": "I",
+      "subject": "IMGT",
+      "confirmed": false
+    },
+    {
+      "code": "IMGT 3152",
+      "title": null,
+      "credits": 2,
+      "level": 3,
+      "semester": "I",
+      "subject": "IMGT",
+      "confirmed": false
+    },
+    {
+      "code": "IMGT 3172",
+      "title": null,
+      "credits": 2,
+      "level": 3,
+      "semester": "I",
+      "subject": "IMGT",
+      "confirmed": false
+    },
+    {
+      "code": "ELTN 4122",
+      "title": null,
+      "credits": 2,
+      "level": 4,
+      "semester": "I",
+      "subject": "ELTN",
+      "confirmed": false
+    },
+    {
+      "code": "ELTN 4131",
+      "title": null,
+      "credits": 1,
+      "level": 4,
+      "semester": "I",
+      "subject": "ELTN",
+      "confirmed": false
+    },
+    {
+      "code": "IMGT 4184",
+      "title": null,
+      "credits": 4,
+      "level": 4,
+      "semester": "I",
+      "subject": "IMGT",
+      "confirmed": false
+    },
+    {
+      "code": "IMGT 4192",
+      "title": null,
+      "credits": 2,
+      "level": 4,
+      "semester": "I",
+      "subject": "IMGT",
+      "confirmed": false
+    },
+    {
+      "code": "STAT 4124",
+      "title": null,
+      "credits": 4,
+      "level": 4,
+      "semester": "I",
+      "subject": "STAT",
+      "confirmed": false
+    }
   ],
   "named_courses": [
-    {"name": "Orientation", "title": "Orientation Programme", "non_credit": true},
-    {"name": "Business English", "title": "Business English", "non_credit": true, "confirmed": false},
-    {"name": "GAC", "title": "General Auxiliary Courses", "non_credit": true}
+    {
+      "name": "Orientation",
+      "title": "Orientation Programme",
+      "non_credit": true
+    },
+    {
+      "name": "Business English",
+      "title": "Business English",
+      "non_credit": true,
+      "confirmed": false
+    },
+    {
+      "name": "GAC",
+      "title": "General Auxiliary Courses",
+      "non_credit": true
+    }
   ]
 }

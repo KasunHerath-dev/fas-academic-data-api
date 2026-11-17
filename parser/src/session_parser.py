@@ -1,6 +1,6 @@
 import re
 
-from academic.modules import CANONICAL_CODE_RE, CODE_TOKEN_PATTERN, match_module_code
+from academic.modules import CODE_TOKEN_PATTERN, is_valid_module_code, match_module_code
 
 class SessionParser:
     def __init__(self):
@@ -133,7 +133,7 @@ class SessionParser:
                 }
                 
                 module_match = anchor["match"]
-                if CANONICAL_CODE_RE.fullmatch(module_match.code):
+                if is_valid_module_code(module_match.code):
                     session["moduleCode"] = module_match.code
                     session["moduleName"] = module_match.module.title if module_match.module else None
                     session["validation"]["moduleCode"] = True

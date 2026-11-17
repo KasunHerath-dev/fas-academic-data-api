@@ -56,6 +56,9 @@ SUBJECT_NAMES = {
 KNOWN_PREFIXES = frozenset(SUBJECT_NAMES)
 
 CANONICAL_CODE_RE = re.compile(r"^[A-Z]{4} [1-4][12†]\d{2}$")
+# The English Language Proficiency Course has no numeric module code in the tracker
+# or the academic-flow document; it is identified by level (paired with ELPT I / II).
+ELPC_BY_LEVEL = {"1": "ELPC I", "2": "ELPC II"}
 # Loose candidate: 3-5 prefix chars (letters or OCR digits), optional space/dash, 4 body chars.
 _CANDIDATE_RE = re.compile(
     r"^(?P<prefix>[A-Za-z0158]{3,5})\s*[-–]?\s*(?P<body>[0-9OoDQIli|!ZzSsBGg+ᵻ‡⁺✝ł†tT*]{4})$"
@@ -274,8 +277,10 @@ def match_module_code(raw: Optional[str]) -> ModuleMatch:
         return ModuleMatch(raw=raw, code=named["name"], status="named_course", confidence=1.0,
                            notes=["non-credit course" if named.get("non_credit") else "named course"])
 
-    if text in catalogue:
-        return ModuleMatch(raw=raw, code=text, status="exact", confidence=1.0, module=catalogue[text])
+    if text.upper() in catalogue:
+        code = text.upper()
+        return ModuleMatch(raw=raw, code=code, status="exact" if code == text else "normalized",
+                           confidence=1.0, module=catalogue[code])
 
     m = _CANDIDATE_RE.match(text)
     if not m:
@@ -294,6 +299,11 @@ def match_module_code(raw: Optional[str]) -> ModuleMatch:
 
     code = f"{prefix} {body}"
     confidence = round(prefix_conf * (0.95 if notes else 1.0), 2)
+    if prefix == "ELPC" and body[0] in ELPC_BY_LEVEL:
+        english = ELPC_BY_LEVEL[body[0]]
+        notes.append(f"English Language Proficiency Course code '{code}' identified as {english} (level {body[0]})")
+        return ModuleMatch(raw=raw, code=english, status="normalized", confidence=confidence,
+                           module=catalogue[english], notes=notes)
     if code in catalogue:
         status = "exact" if code == text else "normalized"
         return ModuleMatch(raw=raw, code=code, status=status, confidence=confidence if status != "exact" else 1.0,
@@ -321,3 +331,8 @@ def find_module_codes(text: str) -> list[tuple[str, int, int]]:
 def is_named_course(text: Optional[str]) -> bool:
     """True for non-code timetable entries such as 'Orientation' or 'Business English'."""
     return bool(text) and _clean(text).upper() in _named_courses()
+
+
+def is_valid_module_code(code: Optional[str]) -> bool:
+    """A canonical numeric code (CMIS 4142, CMIS 4†18) or a catalogue / named-course identifier (ELPC I)."""
+    return bool(code) and (bool(CANONICAL_CODE_RE.fullmatch(code)) or code in load_catalogue() or is_named_course(code))

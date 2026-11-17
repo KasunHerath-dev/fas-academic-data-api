@@ -30,8 +30,12 @@ def test_catalogue_json_matches_tracker_document():
     # Review A: dagger read as + or ᵻ
     ("IMGT 3+34", "IMGT 3†34", "normalized"),
     ("IMGT 3ᵻ34", "IMGT 3†34", "normalized"),
-    ("ELPC 1+10", "ELPC 1†10", "normalized"),
-    ("ELPC 2+20", "ELPC 2†20", "normalized"),
+    # English Language Proficiency Course: identified by level, no numeric code in the tracker
+    ("ELPC 1+10", "ELPC I", "normalized"),
+    ("ELPC 2+20", "ELPC II", "normalized"),
+    ("ELPC 1ᵻ10", "ELPC I", "normalized"),
+    ("ELPC 2†20", "ELPC II", "normalized"),
+    ("ELPC I", "ELPC I", "exact"),
     ("ELTN 3+53", "ELTN 3†53", "normalized"),
     ("ELTN 4+78", "ELTN 4†78", "normalized"),
     ("IMGT 4+06", "IMGT 4†06", "normalized"),
@@ -138,3 +142,13 @@ def test_backfill_plan_repairs_every_resolvable_code():
     assert {(s.module_code, m.code) for s, m in repairs} == {
         ("MIS 4142", "CMIS 4142"), ("IMGT 3+34", "IMGT 3†34"), ("MATH 1113", "MATH 1112")}
     assert skipped == []
+
+
+def test_english_course_is_never_mapped_to_another_subject():
+    """The closest tracker code by spelling is Electronics (ELTN); English must stay ELPC."""
+    for raw in ("ELPC 1+10", "ELPC 2+20"):
+        match = match_module_code(raw)
+        assert match.code.startswith("ELPC ")
+        assert match.module.non_credit is True
+        assert match.module.credits == 0
+        assert match.module.title.startswith("English Language Proficiency Course")

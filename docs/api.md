@@ -77,6 +77,7 @@ Resolves raw or OCR-damaged text to the closest module:
 | `MIS 4142` | `CMIS 4142` | `normalized` (prefix letter dropped by OCR) |
 | `IMGT 3+34`, `IMGT 3ᵻ34` | `IMGT 3†34` | `normalized` (dagger misread) |
 | `cmis2123`, `CMIS 2l23` | `CMIS 2123` | `normalized` |
+| `ELPC 1+10`, `ELPC 2+20` | `ELPC I`, `ELPC II` | `normalized` (English Language Proficiency Course, non-credit; no numeric code in the tracker) |
 | `MATH 1113` | `MATH 1112` | `closest_match` (not in the tracker; closest module of the same subject and level) |
 | `GNCT 1112` | `GNCT 1112` | `unlisted` (no catalogue module for that subject and level) |
 | `Business English` | `Business English` | `named_course` (non-credit) |

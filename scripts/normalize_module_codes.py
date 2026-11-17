@@ -13,7 +13,7 @@ import argparse
 import sys
 from collections import Counter
 
-from academic.modules import CANONICAL_CODE_RE, match_module_code
+from academic.modules import is_valid_module_code, match_module_code
 from api.services.module_enrichment import READ_TIME_REPAIR_MIN_CONFIDENCE
 
 
@@ -23,7 +23,7 @@ def plan_repairs(sessions):
         if not s.module_code:
             continue
         match = match_module_code(s.module_code)
-        if not match.code or match.code == s.module_code or not CANONICAL_CODE_RE.fullmatch(match.code):
+        if not match.code or match.code == s.module_code or not is_valid_module_code(match.code):
             continue
         if match.confidence >= READ_TIME_REPAIR_MIN_CONFIDENCE:
             repairs.append((s, match))

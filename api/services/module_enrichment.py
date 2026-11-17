@@ -9,7 +9,7 @@ consumers always see the canonical code, catalogue title and credits, while
 """
 from typing import Optional
 
-from academic.modules import CANONICAL_CODE_RE, match_module_code
+from academic.modules import ELPC_BY_LEVEL, is_valid_module_code, match_module_code
 
 # Stored codes are repaired at read time whenever they resolve to a catalogue code.
 READ_TIME_REPAIR_MIN_CONFIDENCE = 0.0
@@ -22,13 +22,18 @@ def resolve_query_code(module_code: Optional[str]) -> list[str]:
     typed = " ".join(module_code.split())
     codes = {typed, typed.upper()}
     match = match_module_code(typed)
-    if match.code and CANONICAL_CODE_RE.fullmatch(match.code):
+    if match.code and is_valid_module_code(match.code):
         code = match.code
         codes.add(code)
         # Rows ingested before the matcher existed may still hold OCR variants.
         if "†" in code:
             codes.update(code.replace("†", v) for v in ("+", "ᵻ"))
-        codes.add(code[1:])  # dropped first prefix letter, e.g. "MIS 4142"
+        if " " in code and code.split(" ")[1][:1].isdigit():
+            codes.add(code[1:])  # dropped first prefix letter, e.g. "MIS 4142"
+        # Stored English course codes as printed in the timetable (ELPC 1+10 / ELPC 1†10).
+        for level, english in ELPC_BY_LEVEL.items():
+            if code == english:
+                codes.update({f"ELPC {level}†{level}0", f"ELPC {level}+{level}0", f"ELPC {level}ᵻ{level}0"})
     return sorted(codes)
 
 
@@ -40,7 +45,7 @@ def enrich_session(session) -> dict:
     module_code = stored_code
     if (match and match.code and match.code != stored_code
             and match.confidence >= READ_TIME_REPAIR_MIN_CONFIDENCE
-            and CANONICAL_CODE_RE.fullmatch(match.code)):
+            and is_valid_module_code(match.code)):
         module_code = match.code
 
     module = match.module if match else None
@@ -61,7 +66,7 @@ def enrich_session(session) -> dict:
         "module_name": module.title if module else None,
         "credits": module.credits if module else None,
         "subject": module_code.split(" ")[0] if module_code and " " in module_code else None,
-        "year_long": bool(module_code and "†" in module_code),
+        "year_long": bool(module_code and "†" in module_code) or bool(module and module.semester == "both"),
         "non_credit": bool(module.non_credit) if module else (match.status == "named_course" if match else False),
         "module_match": {
             "status": match.status,

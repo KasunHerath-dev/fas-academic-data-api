@@ -132,9 +132,16 @@ def test_api_never_emits_needs_review_for_english_courses(client):
                             time_source="explicit", verification_status="verified"))
     db.commit()
     db.close()
-    s = client.get("/api/v1/timetables", params={"module_code": "ELPC 1†10"}).json()["data"][0]
-    assert s["module_code"] == "ELPC 1†10"
+    for query in ("ELPC I", "ELPC 1+10", "elpc i"):
+        res = client.get("/api/v1/timetables", params={"module_code": query}).json()
+        assert res["count"] == 1, query
+    s = res["data"][0]
+    assert s["module_code"] == "ELPC I"
     assert s["raw_module_code"] == "ELPC 1+10"
+    assert s["module_name"] == "English Language Proficiency Course I"
+    assert s["subject"] == "ELPC"
     assert s["non_credit"] is True
+    assert s["credits"] == 0
+    assert s["year_long"] is True
     assert s["verification_status"] == "verified"
     assert "NEEDS_REVIEW" not in str(s)
