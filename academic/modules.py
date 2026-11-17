@@ -80,6 +80,8 @@ class CatalogueModule:
     non_credit: bool = False
     confirmed: bool = True
     source: str = ""
+    timetable_codes: list[str] = field(default_factory=list)
+    """How the module is printed in timetable PDFs (e.g. ELPC I -> 'ELPC 1+10')."""
 
     def to_dict(self) -> dict:
         data = asdict(self)
@@ -120,6 +122,13 @@ class ModuleMatch:
         }
 
 
+def _timetable_codes(entry: dict) -> list[str]:
+    """Explicit timetable_codes, else the printed form of a year-long code ('†' prints as '+')."""
+    if entry.get("timetable_codes"):
+        return list(entry["timetable_codes"])
+    return [entry["code"].replace(DAGGER, "+")] if DAGGER in entry["code"] else []
+
+
 @lru_cache(maxsize=1)
 def load_catalogue() -> dict[str, CatalogueModule]:
     catalogue: dict[str, CatalogueModule] = {}
@@ -128,6 +137,7 @@ def load_catalogue() -> dict[str, CatalogueModule]:
         catalogue[m["code"]] = CatalogueModule(
             code=m["code"], title=m["title"], credits=m["credits"], level=m["level"],
             semester=m["semester"], subject=m["subject"], source=m.get("source", "tracker"),
+            timetable_codes=_timetable_codes(m),
         )
     overrides = json.loads((DATA_DIR / "module_overrides.json").read_text(encoding="utf-8"))
     for m in overrides["modules"]:
@@ -137,6 +147,7 @@ def load_catalogue() -> dict[str, CatalogueModule]:
             code=m["code"], title=m.get("title"), credits=m.get("credits"), level=m.get("level"),
             semester=m.get("semester"), subject=m["subject"], non_credit=m.get("non_credit", False),
             confirmed=m.get("confirmed", False), source="module-code-review.md",
+            timetable_codes=_timetable_codes(m),
         )
     return catalogue
 
@@ -301,7 +312,8 @@ def match_module_code(raw: Optional[str]) -> ModuleMatch:
     confidence = round(prefix_conf * (0.95 if notes else 1.0), 2)
     if prefix == "ELPC" and body[0] in ELPC_BY_LEVEL:
         english = ELPC_BY_LEVEL[body[0]]
-        notes.append(f"English Language Proficiency Course code '{code}' identified as {english} (level {body[0]})")
+        printed = ", ".join(catalogue[english].timetable_codes) or code
+        notes.append(f"{english} is the English Language Proficiency Course printed as {printed} in timetables")
         return ModuleMatch(raw=raw, code=english, status="normalized", confidence=confidence,
                            module=catalogue[english], notes=notes)
     if code in catalogue:

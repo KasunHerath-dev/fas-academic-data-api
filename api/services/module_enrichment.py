@@ -9,7 +9,7 @@ consumers always see the canonical code, catalogue title and credits, while
 """
 from typing import Optional
 
-from academic.modules import ELPC_BY_LEVEL, is_valid_module_code, match_module_code
+from academic.modules import is_valid_module_code, load_catalogue, match_module_code
 
 # Stored codes are repaired at read time whenever they resolve to a catalogue code.
 READ_TIME_REPAIR_MIN_CONFIDENCE = 0.0
@@ -30,10 +30,10 @@ def resolve_query_code(module_code: Optional[str]) -> list[str]:
             codes.update(code.replace("†", v) for v in ("+", "ᵻ"))
         if " " in code and code.split(" ")[1][:1].isdigit():
             codes.add(code[1:])  # dropped first prefix letter, e.g. "MIS 4142"
-        # Stored English course codes as printed in the timetable (ELPC 1+10 / ELPC 1†10).
-        for level, english in ELPC_BY_LEVEL.items():
-            if code == english:
-                codes.update({f"ELPC {level}†{level}0", f"ELPC {level}+{level}0", f"ELPC {level}ᵻ{level}0"})
+        # Codes as printed in timetables, and their dagger variants (ELPC 1+10, ELPC 1†10).
+        module = load_catalogue().get(code)
+        for printed in (module.timetable_codes if module else []):
+            codes.update(printed.replace("+", v) for v in ("+", "†", "ᵻ"))
     return sorted(codes)
 
 
@@ -64,6 +64,7 @@ def enrich_session(session) -> dict:
         "module_code": module_code,
         "raw_module_code": raw_code,
         "module_name": module.title if module else None,
+        "timetable_codes": module.timetable_codes if module else [],
         "credits": module.credits if module else None,
         "subject": module_code.split(" ")[0] if module_code and " " in module_code else None,
         "year_long": bool(module_code and "†" in module_code) or bool(module and module.semester == "both"),

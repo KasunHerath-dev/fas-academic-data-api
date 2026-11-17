@@ -27,6 +27,9 @@ class TimetableSessionResponse(BaseModel):
     module_code: Optional[str] = Field(None, description="Canonical module code, e.g. 'CMIS 4142' or 'CMIS 4†18' (year-long)")
     raw_module_code: Optional[str] = Field(None, description="Module code exactly as read from the PDF")
     module_name: Optional[str] = Field(None, description="Title from the module catalogue")
+    timetable_codes: List[str] = Field(
+        default_factory=list,
+        description="How this module is printed in timetable PDFs, e.g. ['ELPC 1+10'] for ELPC I")
     credits: Optional[int] = None
     subject: Optional[str] = None
     year_long: bool = False

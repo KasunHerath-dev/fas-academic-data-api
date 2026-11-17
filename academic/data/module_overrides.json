@@ -1,5 +1,5 @@
 {
-  "_comment": "Hand-curated entries from docs/acadamic/module-code-review.md. Codes here appear in official timetables but not in the 2020/2021 module tracker. Titles marked null are unconfirmed; do not invent them. 'confirmed' is false until the faculty or a newer prospectus confirms the entry. The English Language Proficiency Course has no numeric code in the tracker or flow doc; it is identified by level as ELPC I / ELPC II (paired with the ELPT I / ELPT II tests). Timetable codes such as ELPC 1+10 / ELPC 2+20 resolve to these.",
+  "_comment": "Hand-curated entries from docs/acadamic/module-code-review.md. Codes here appear in official timetables but not in the 2020/2021 module tracker. Titles marked null are unconfirmed; do not invent them. 'confirmed' is false until the faculty or a newer prospectus confirms the entry. The English Language Proficiency Course has no numeric code in the tracker or flow doc; it is identified by level as ELPC I / ELPC II (paired with the ELPT I / ELPT II tests). Timetable codes such as ELPC 1+10 / ELPC 2+20 resolve to these. 'timetable_codes' lists the code each module is printed as in timetable PDFs.",
   "modules": [
     {
       "code": "ELPC I",
@@ -9,7 +9,10 @@
       "semester": "both",
       "subject": "ELPC",
       "non_credit": true,
-      "confirmed": false
+      "confirmed": false,
+      "timetable_codes": [
+        "ELPC 1+10"
+      ]
     },
     {
       "code": "ELPC II",
@@ -19,7 +22,10 @@
       "semester": "both",
       "subject": "ELPC",
       "non_credit": true,
-      "confirmed": false
+      "confirmed": false,
+      "timetable_codes": [
+        "ELPC 2+20"
+      ]
     },
     {
       "code": "ELTN 3†53",

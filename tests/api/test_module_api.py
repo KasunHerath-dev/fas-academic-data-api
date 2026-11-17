@@ -139,9 +139,21 @@ def test_api_never_emits_needs_review_for_english_courses(client):
     assert s["module_code"] == "ELPC I"
     assert s["raw_module_code"] == "ELPC 1+10"
     assert s["module_name"] == "English Language Proficiency Course I"
+    assert s["timetable_codes"] == ["ELPC 1+10"]
     assert s["subject"] == "ELPC"
     assert s["non_credit"] is True
     assert s["credits"] == 0
     assert s["year_long"] is True
     assert s["verification_status"] == "verified"
     assert "NEEDS_REVIEW" not in str(s)
+
+
+def test_catalogue_tells_developers_which_timetable_code_each_english_course_is(client):
+    mods = {m["code"]: m for m in client.get("/api/v1/catalogue/modules?subject=ELPC").json()}
+    assert mods["ELPC I"]["timetable_codes"] == ["ELPC 1+10"]
+    assert mods["ELPC II"]["timetable_codes"] == ["ELPC 2+20"]
+    assert mods["ELPC I"]["level"] == 1 and mods["ELPC II"]["level"] == 2
+
+    body = client.get("/api/v1/catalogue/modules/resolve", params={"code": "ELPC 2+20"}).json()
+    assert body["code"] == "ELPC II"
+    assert body["module"]["timetable_codes"] == ["ELPC 2+20"]

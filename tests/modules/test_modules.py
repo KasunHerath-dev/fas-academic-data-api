@@ -152,3 +152,15 @@ def test_english_course_is_never_mapped_to_another_subject():
         assert match.module.non_credit is True
         assert match.module.credits == 0
         assert match.module.title.startswith("English Language Proficiency Course")
+
+
+def test_timetable_codes_link_catalogue_codes_to_printed_codes():
+    catalogue = load_catalogue()
+    assert catalogue["ELPC I"].timetable_codes == ["ELPC 1+10"]
+    assert catalogue["ELPC II"].timetable_codes == ["ELPC 2+20"]
+    assert catalogue["IMGT 3†34"].timetable_codes == ["IMGT 3+34"]
+    assert catalogue["CMIS 2123"].timetable_codes == []
+    # every printed code resolves back to its catalogue module
+    for module in catalogue.values():
+        for printed in module.timetable_codes:
+            assert match_module_code(printed).code == module.code, printed

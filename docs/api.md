@@ -78,6 +78,11 @@ Resolves raw or OCR-damaged text to the closest module:
 | `IMGT 3+34`, `IMGT 3ᵻ34` | `IMGT 3†34` | `normalized` (dagger misread) |
 | `cmis2123`, `CMIS 2l23` | `CMIS 2123` | `normalized` |
 | `ELPC 1+10`, `ELPC 2+20` | `ELPC I`, `ELPC II` | `normalized` (English Language Proficiency Course, non-credit; no numeric code in the tracker) |
+
+Each catalogue module and each timetable session carries `timetable_codes`: how the
+module is printed in timetable PDFs. `ELPC I` is `["ELPC 1+10"]`, `ELPC II` is
+`["ELPC 2+20"]`, and year-long modules list their `+` form (`IMGT 3†34` → `["IMGT 3+34"]`).
+Use it to match API data against codes students see on the printed timetable.
 | `MATH 1113` | `MATH 1112` | `closest_match` (not in the tracker; closest module of the same subject and level) |
 | `GNCT 1112` | `GNCT 1112` | `unlisted` (no catalogue module for that subject and level) |
 | `Business English` | `Business English` | `named_course` (non-credit) |

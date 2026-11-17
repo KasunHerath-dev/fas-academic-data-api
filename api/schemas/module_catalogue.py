@@ -15,6 +15,9 @@ class CatalogueModuleResponse(BaseModel):
     non_credit: bool = False
     confirmed: bool = True
     source: str = ""
+    timetable_codes: List[str] = Field(
+        default_factory=list,
+        description="How this module is printed in timetable PDFs, e.g. ['ELPC 1+10'] for ELPC I")
 
 
 class ModuleResolutionResponse(BaseModel):
