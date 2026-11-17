@@ -6,3 +6,10 @@ __pycache__/
 alembic.ini
 parser/input/*.pdf
 parser/output/
+
+# Virtualenvs and build output (never commit these)
+.venv/
+uv_venv/
+test_venv/
+build/
+*.egg-info/
