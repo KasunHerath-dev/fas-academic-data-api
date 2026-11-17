@@ -82,7 +82,7 @@ def test_ingestion_review_required(db_session, monkeypatch, tmp_path):
                     day="Monday",
                     start_time="08:30",
                     end_time="10:30",
-                    module_code="ELTN 3+53", # triggers uncertain
+                    module_code="ELTN 3=53", # triggers uncertain
                     time_source="explicit",
                     verification_status="uncertain",
                     raw_evidence={},

@@ -73,12 +73,12 @@ def test_missing_group_allowed(validator):
     assert res.status == ValidationStatus.VALID
 
 def test_suspicious_module_code(validator):
-    s = create_session(module_code="ELTN 3+53")
+    s = create_session(module_code="ELTN 3=53")
     res = validator.validate_session(s)
     assert res.status == ValidationStatus.UNCERTAIN
     assert any("Suspicious module code OCR" in w for w in res.warnings)
     # Ensure original evidence is untouched
-    assert s.module_code == "ELTN 3+53"
+    assert s.module_code == "ELTN 3=53"
 
 def test_ambiguous_group_ocr(validator):
     s = create_session(group="Gp. ll")
@@ -109,7 +109,7 @@ def test_document_quality_gate(validator):
     assert validator.validate_timetable(t_safe).status == DocumentGateStatus.SAFE
     
     # REVIEW_REQUIRED
-    s2 = create_session(module_code="ELTN 3+53")
+    s2 = create_session(module_code="ELTN 3=53")
     t_review = ParsedTimetable(sessions=[s1, s2], diagnostics=[], report={})
     assert validator.validate_timetable(t_review).status == DocumentGateStatus.REVIEW_REQUIRED
     

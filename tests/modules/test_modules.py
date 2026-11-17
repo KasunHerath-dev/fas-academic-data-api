@@ -24,22 +24,24 @@ def test_catalogue_json_matches_tracker_document():
 @pytest.mark.parametrize("raw, code, status", [
     # Exact catalogue codes are untouched
     ("CMIS 2123", "CMIS 2123", "exact"),
-    ("CMIS 4†18", "CMIS 4†18", "exact"),
+    ("CMIS 4+18", "CMIS 4+18", "exact"),
+    ("CMIS 4†18", "CMIS 4+18", "normalized"),  # prospectus form
     # Review B: prefix lost its first letter
     ("MIS 4142", "CMIS 4142", "normalized"),
     # Review A: dagger read as + or ᵻ
-    ("IMGT 3+34", "IMGT 3†34", "normalized"),
-    ("IMGT 3ᵻ34", "IMGT 3†34", "normalized"),
+    ("IMGT 3+34", "IMGT 3+34", "exact"),
+    ("IMGT 3ᵻ34", "IMGT 3+34", "normalized"),
     # English Language Proficiency Course: identified by level, no numeric code in the tracker
     ("ELPC 1+10", "ELPC I", "normalized"),
     ("ELPC 2+20", "ELPC II", "normalized"),
     ("ELPC 1ᵻ10", "ELPC I", "normalized"),
     ("ELPC 2†20", "ELPC II", "normalized"),
     ("ELPC I", "ELPC I", "exact"),
-    ("ELTN 3+53", "ELTN 3†53", "normalized"),
-    ("ELTN 4+78", "ELTN 4†78", "normalized"),
-    ("IMGT 4+06", "IMGT 4†06", "normalized"),
-    ("CMIS 4+26", "CMIS 4†26", "normalized"),
+    ("ELTN 3+53", "ELTN 3+53", "exact"),
+    ("ELTN 3ᵻ53", "ELTN 3+53", "normalized"),
+    ("ELTN 4+78", "ELTN 4+78", "exact"),
+    ("IMGT 4+06", "IMGT 4+06", "exact"),
+    ("CMIS 4+26", "CMIS 4+26", "exact"),
     # Spacing, case and letter/digit confusions
     ("CMIS4123", "CMIS 4123", "normalized"),
     ("cmis 2123", "CMIS 2123", "normalized"),
@@ -77,7 +79,7 @@ def test_closest_match_prefers_same_semester_then_confirmed_tracker_modules():
     # CMIS 3122 (tracker) and CMIS 3124 (unconfirmed timetable code) are equally close
     assert match_module_code("CMIS 3125").code == "CMIS 3122"
     # year-long codes match year-long modules
-    assert match_module_code("ELTN 4+99").code == "ELTN 4†92"
+    assert match_module_code("ELTN 4+99").code == "ELTN 4+92"
     # no exact module number: still the closest module of that subject and level
     assert match_module_code("STAT 4199").code == "STAT 4114"
 
@@ -110,13 +112,13 @@ def test_unconfirmed_timetable_codes_are_in_catalogue_but_flagged():
     assert catalogue["CMIS 3124"].confirmed is False
     assert catalogue["CMIS 3124"].title is None
     # The tracker wins over curated entries
-    assert catalogue["CMIS 4†18"].confirmed is True
+    assert catalogue["CMIS 4+18"].confirmed is True
 
 
 def test_list_modules_filters():
     l4s1 = {m.code for m in list_modules(level=4, semester="1")}
     assert "CMIS 4142" in l4s1
-    assert "CMIS 4†18" in l4s1  # year-long modules appear in both semesters
+    assert "CMIS 4+18" in l4s1  # year-long modules appear in both semesters
     assert "CMIS 4216" not in l4s1
     assert all(m.subject == "STAT" for m in list_modules(subject="stat"))
     assert all(m.confirmed for m in list_modules(include_unconfirmed=False))
@@ -137,10 +139,10 @@ def test_backfill_plan_repairs_every_resolvable_code():
     from scripts.normalize_module_codes import plan_repairs
 
     rows = [SimpleNamespace(module_code=c) for c in
-            ["MIS 4142", "IMGT 3+34", "CMIS 2123", "MATH 1113", None, "GNCT 1112"]]
+            ["MIS 4142", "IMGT 3ᵻ34", "IMGT 3+34", "CMIS 2123", "MATH 1113", None, "GNCT 1112"]]
     repairs, skipped = plan_repairs(rows)
     assert {(s.module_code, m.code) for s, m in repairs} == {
-        ("MIS 4142", "CMIS 4142"), ("IMGT 3+34", "IMGT 3†34"), ("MATH 1113", "MATH 1112")}
+        ("MIS 4142", "CMIS 4142"), ("IMGT 3ᵻ34", "IMGT 3+34"), ("MATH 1113", "MATH 1112")}
     assert skipped == []
 
 
@@ -158,7 +160,7 @@ def test_timetable_codes_link_catalogue_codes_to_printed_codes():
     catalogue = load_catalogue()
     assert catalogue["ELPC I"].timetable_codes == ["ELPC 1+10"]
     assert catalogue["ELPC II"].timetable_codes == ["ELPC 2+20"]
-    assert catalogue["IMGT 3†34"].timetable_codes == ["IMGT 3+34"]
+    assert catalogue["IMGT 3+34"].timetable_codes == ["IMGT 3+34"]
     assert catalogue["CMIS 2123"].timetable_codes == []
     # every printed code resolves back to its catalogue module
     for module in catalogue.values():

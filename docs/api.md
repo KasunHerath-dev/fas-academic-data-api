@@ -66,7 +66,7 @@ Data lives in `academic/data/`; regenerate the tracker part with
 
 ### `GET /api/v1/catalogue/modules`
 Filters: `level` (1-4), `semester` (`1`/`2`/`I`/`II`), `subject` (`CMIS`, ...), `include_unconfirmed`.
-Year-long modules (`†` in the semester digit, e.g. `CMIS 4†18`) have `semester: "both"` and match either semester.
+Year-long modules use `+` in the semester digit, as printed in the timetables (e.g. `CMIS 4+18`; the prospectus writes `CMIS 4†18`). They have `semester: "both"` and match either semester.
 
 ### `GET /api/v1/catalogue/modules/resolve?code=...`
 Resolves raw or OCR-damaged text to the closest module:
@@ -75,13 +75,14 @@ Resolves raw or OCR-damaged text to the closest module:
 |---|---|---|
 | `CMIS 2123` | `CMIS 2123` | `exact` |
 | `MIS 4142` | `CMIS 4142` | `normalized` (prefix letter dropped by OCR) |
-| `IMGT 3+34`, `IMGT 3ᵻ34` | `IMGT 3†34` | `normalized` (dagger misread) |
+| `IMGT 3+34` | `IMGT 3+34` | `exact` (year-long module) |
+| `IMGT 3ᵻ34`, `IMGT 3†34` | `IMGT 3+34` | `normalized` (`ᵻ` and the prospectus `†` mean the same `+`) |
 | `cmis2123`, `CMIS 2l23` | `CMIS 2123` | `normalized` |
 | `ELPC 1+10`, `ELPC 2+20` | `ELPC I`, `ELPC II` | `normalized` (English Language Proficiency Course, non-credit; no numeric code in the tracker) |
 
 Each catalogue module and each timetable session carries `timetable_codes`: how the
 module is printed in timetable PDFs. `ELPC I` is `["ELPC 1+10"]`, `ELPC II` is
-`["ELPC 2+20"]`, and year-long modules list their `+` form (`IMGT 3†34` → `["IMGT 3+34"]`).
+`["ELPC 2+20"]`, and year-long modules list their printed code (`IMGT 3+34` → `["IMGT 3+34"]`).
 Use it to match API data against codes students see on the printed timetable.
 | `MATH 1113` | `MATH 1112` | `closest_match` (not in the tracker; closest module of the same subject and level) |
 | `GNCT 1112` | `GNCT 1112` | `unlisted` (no catalogue module for that subject and level) |
@@ -115,7 +116,7 @@ Returns structured timetable sessions from stored academic data.
 Sessions are returned Monday → Sunday in timetable order.
 
 **Module fields on each session:**
-- `module_code` — canonical code (`CMIS 4142`, `IMGT 3†34`)
+- `module_code` — canonical code (`CMIS 4142`, `IMGT 3+34`, `ELPC I`)
 - `raw_module_code` — exactly as read from the PDF
 - `module_name`, `credits`, `subject`, `year_long`, `non_credit` — from the module catalogue
 - `module_match` — `status`, `confidence`, `in_catalogue`, `catalogue_confirmed`, `closest_match`, `notes`

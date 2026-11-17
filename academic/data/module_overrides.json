@@ -1,5 +1,5 @@
 {
-  "_comment": "Hand-curated entries from docs/acadamic/module-code-review.md. Codes here appear in official timetables but not in the 2020/2021 module tracker. Titles marked null are unconfirmed; do not invent them. 'confirmed' is false until the faculty or a newer prospectus confirms the entry. The English Language Proficiency Course has no numeric code in the tracker or flow doc; it is identified by level as ELPC I / ELPC II (paired with the ELPT I / ELPT II tests). Timetable codes such as ELPC 1+10 / ELPC 2+20 resolve to these. 'timetable_codes' lists the code each module is printed as in timetable PDFs.",
+  "_comment": "Hand-curated entries from docs/acadamic/module-code-review.md. Codes here appear in official timetables but not in the 2020/2021 module tracker. Year-long codes use '+' as printed in timetables (the prospectus writes '†'). Titles marked null are unconfirmed; do not invent them. 'confirmed' is false until the faculty or a newer prospectus confirms the entry. The English Language Proficiency Course has no numeric code in the tracker or flow doc; it is identified by level as ELPC I / ELPC II (paired with the ELPT I / ELPT II tests). Timetable codes such as ELPC 1+10 / ELPC 2+20 resolve to these. 'timetable_codes' lists the code each module is printed as in timetable PDFs.",
   "modules": [
     {
       "code": "ELPC I",
@@ -28,7 +28,7 @@
       ]
     },
     {
-      "code": "ELTN 3†53",
+      "code": "ELTN 3+53",
       "title": null,
       "credits": 3,
       "level": 3,
@@ -37,7 +37,7 @@
       "confirmed": false
     },
     {
-      "code": "IMGT 3†34",
+      "code": "IMGT 3+34",
       "title": null,
       "credits": 4,
       "level": 3,
@@ -46,7 +46,7 @@
       "confirmed": false
     },
     {
-      "code": "ELTN 4†63",
+      "code": "ELTN 4+63",
       "title": null,
       "credits": 3,
       "level": 4,
@@ -55,7 +55,7 @@
       "confirmed": false
     },
     {
-      "code": "ELTN 4†78",
+      "code": "ELTN 4+78",
       "title": null,
       "credits": 8,
       "level": 4,
@@ -64,7 +64,7 @@
       "confirmed": false
     },
     {
-      "code": "ELTN 4†86",
+      "code": "ELTN 4+86",
       "title": null,
       "credits": 6,
       "level": 4,
@@ -73,7 +73,7 @@
       "confirmed": false
     },
     {
-      "code": "ELTN 4†92",
+      "code": "ELTN 4+92",
       "title": null,
       "credits": 2,
       "level": 4,
@@ -82,7 +82,7 @@
       "confirmed": false
     },
     {
-      "code": "IMGT 4†06",
+      "code": "IMGT 4+06",
       "title": null,
       "credits": 6,
       "level": 4,

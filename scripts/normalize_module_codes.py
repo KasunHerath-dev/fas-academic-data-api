@@ -5,7 +5,7 @@ Repair OCR-damaged module codes already stored in timetable_sessions.
     PYTHONPATH=. python scripts/normalize_module_codes.py --apply   # write changes
 
 For each session whose module_code resolves to a different canonical code with
-enough confidence (e.g. 'MIS 4142' -> 'CMIS 4142', 'IMGT 3+34' -> 'IMGT 3†34'),
+enough confidence (e.g. 'MIS 4142' -> 'CMIS 4142', 'IMGT 3ᵻ34' -> 'IMGT 3+34'),
 the original text is copied to raw_module_code (if empty) and module_code is
 updated. Nothing else is touched. Low-confidence matches are only reported.
 """

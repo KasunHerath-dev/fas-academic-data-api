@@ -66,7 +66,7 @@ def test_sessions_are_enriched_and_damaged_codes_repaired(client):
     assert image["module_match"]["status"] == "normalized"
 
     lab = by_raw["IMGT 3+34"]
-    assert lab["module_code"] == "IMGT 3†34"
+    assert lab["module_code"] == "IMGT 3+34"
     assert lab["year_long"] is True
     assert lab["module_match"]["catalogue_confirmed"] is False
 
@@ -110,7 +110,7 @@ def test_catalogue_modules_endpoint(client):
     res = client.get("/api/v1/catalogue/modules?level=4&semester=1&subject=CMIS")
     assert res.status_code == 200
     codes = [m["code"] for m in res.json()]
-    assert "CMIS 4142" in codes and "CMIS 4†18" in codes
+    assert "CMIS 4142" in codes and "CMIS 4+18" in codes
     assert "CMIS 4216" not in codes
 
 

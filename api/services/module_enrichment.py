@@ -9,7 +9,7 @@ consumers always see the canonical code, catalogue title and credits, while
 """
 from typing import Optional
 
-from academic.modules import is_valid_module_code, load_catalogue, match_module_code
+from academic.modules import CANONICAL_CODE_RE, is_valid_module_code, load_catalogue, match_module_code
 
 # Stored codes are repaired at read time whenever they resolve to a catalogue code.
 READ_TIME_REPAIR_MIN_CONFIDENCE = 0.0
@@ -26,11 +26,11 @@ def resolve_query_code(module_code: Optional[str]) -> list[str]:
         code = match.code
         codes.add(code)
         # Rows ingested before the matcher existed may still hold OCR variants.
-        if "†" in code:
-            codes.update(code.replace("†", v) for v in ("+", "ᵻ"))
+        if "+" in code:
+            codes.update(code.replace("+", v) for v in ("†", "ᵻ"))
         if " " in code and code.split(" ")[1][:1].isdigit():
             codes.add(code[1:])  # dropped first prefix letter, e.g. "MIS 4142"
-        # Codes as printed in timetables, and their dagger variants (ELPC 1+10, ELPC 1†10).
+        # Codes as printed in timetables, and their OCR variants (ELPC 1+10, ELPC 1ᵻ10).
         module = load_catalogue().get(code)
         for printed in (module.timetable_codes if module else []):
             codes.update(printed.replace("+", v) for v in ("+", "†", "ᵻ"))
@@ -67,7 +67,7 @@ def enrich_session(session) -> dict:
         "timetable_codes": module.timetable_codes if module else [],
         "credits": module.credits if module else None,
         "subject": module_code.split(" ")[0] if module_code and " " in module_code else None,
-        "year_long": bool(module_code and "†" in module_code) or bool(module and module.semester == "both"),
+        "year_long": bool(module_code and CANONICAL_CODE_RE.fullmatch(module_code) and "+" in module_code) or bool(module and module.semester == "both"),
         "non_credit": bool(module.non_credit) if module else (match.status == "named_course" if match else False),
         "module_match": {
             "status": match.status,

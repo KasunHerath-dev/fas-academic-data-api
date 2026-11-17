@@ -17,7 +17,8 @@ router = APIRouter(tags=["Module Catalogue"])
     tracker), plus modules seen in current timetables that the tracker does not list
     (`confirmed: false`, title may be null until the faculty confirms it).
 
-    Year-long modules use `†` in the semester position (e.g. `CMIS 4†18`) and have
+    Year-long modules use `+` in the semester position, as printed in timetables
+    (e.g. `CMIS 4+18`; the prospectus writes `†`), and have
     `semester: "both"`; they are included when filtering by either semester.
 
     The catalogue says which modules exist, not which modules a given student takes.
@@ -40,7 +41,7 @@ def get_catalogue_modules(
     description="""
     Resolve raw module-code text (as printed or as mis-read from a PDF) to the
     closest valid module. Examples: `MIS 4142` → `CMIS 4142`, `IMGT 3+34` →
-    `IMGT 3†34`, `cmis2123` → `CMIS 2123`.
+    `IMGT 3+34`, `cmis2123` → `CMIS 2123`.
 
     A well-formed code missing from the catalogue resolves to the closest catalogue
     module of the same subject and level (`status: "closest_match"`). It is kept

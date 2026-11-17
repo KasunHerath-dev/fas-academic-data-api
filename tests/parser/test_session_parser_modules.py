@@ -43,13 +43,13 @@ def test_dagger_variants_become_one_canonical_code_without_warning():
     for token in ("3+34", "3ᵻ34"):
         sessions = _parse(_words((100, [(10, "IMGT"), (50, token), (95, "(P)")])))
         assert len(sessions) == 1
-        assert sessions[0]["moduleCode"] == "IMGT 3†34"
+        assert sessions[0]["moduleCode"] == "IMGT 3+34"
         assert sessions[0]["warnings"] == []
 
 
 def test_dagger_code_from_pdf_is_anchored():
     sessions = _parse(_words((100, [(10, "CMIS"), (50, "4†18")])))
-    assert [s["moduleCode"] for s in sessions] == ["CMIS 4†18"]
+    assert [s["moduleCode"] for s in sessions] == ["CMIS 4+18"]
 
 
 def test_code_missing_from_tracker_maps_to_closest_module_without_warning():
@@ -88,9 +88,9 @@ def test_validator_accepts_canonical_dagger_codes():
     v = TimetableValidator()
     base = dict(day="Monday", start_time="08:30", end_time="10:30", time_source="explicit",
                 verification_status="verified", raw_evidence={}, warnings=[])
-    assert v.validate_session(ParsedSession(module_code="IMGT 3†34", **base)).status == ValidationStatus.VALID
+    assert v.validate_session(ParsedSession(module_code="IMGT 3+34", **base)).status == ValidationStatus.VALID
     assert v.validate_session(ParsedSession(module_code="Business English", **base)).status == ValidationStatus.VALID
-    res = v.validate_session(ParsedSession(module_code="ELTN 3+53", **base))
+    res = v.validate_session(ParsedSession(module_code="ELTN 3ᵻ53", **base))
     assert res.status == ValidationStatus.UNCERTAIN
 
 

@@ -87,8 +87,8 @@ class TimetableValidator:
         if not session.module_code:
             errors.append("Empty module code")
         else:
-            # Canonical FAS codes look like 'ELTN 2112', or 'CMIS 4†18' for year-long
-            # modules. OCR damage (ELTN 3+53, MIS 4142) is repaired by the parser via
+            # Canonical FAS codes look like 'ELTN 2112', or 'CMIS 4+18' for year-long
+            # modules. OCR damage (ELTN 3ᵻ53, MIS 4142) is repaired by the parser via
             # academic.modules.match_module_code; anything still off-pattern is flagged.
             if not is_valid_module_code(session.module_code):
                 warnings.append(f"Suspicious module code OCR: '{session.module_code}'")

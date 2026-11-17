@@ -24,7 +24,7 @@ class TimetableSessionResponse(BaseModel):
     start_time: str
     end_time: str
     duration_minutes: Optional[int] = None
-    module_code: Optional[str] = Field(None, description="Canonical module code, e.g. 'CMIS 4142' or 'CMIS 4†18' (year-long)")
+    module_code: Optional[str] = Field(None, description="Canonical module code, e.g. 'CMIS 4142' or 'CMIS 4+18' (year-long)")
     raw_module_code: Optional[str] = Field(None, description="Module code exactly as read from the PDF")
     module_name: Optional[str] = Field(None, description="Title from the module catalogue")
     timetable_codes: List[str] = Field(

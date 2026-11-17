@@ -5,7 +5,9 @@ Timetable PDFs are read with text extraction / OCR, which damages some module
 codes. Known failure modes (see docs/acadamic/module-code-review.md):
 
 * The dagger ``†`` in the semester position (year-long modules such as
-  ``CMIS 4†18``) is read as ``+``, ``ᵻ``, ``‡`` or ``t``.
+  ``CMIS 4†18`` in the prospectus) is read as ``+``, ``ᵻ``, ``‡`` or ``t``.
+  All of them are output as ``+``, the form printed in the timetables
+  (``CMIS 4+18``, ``IMGT 3+34``).
 * A prefix loses a letter: ``MIS 4142`` instead of ``CMIS 4142``.
 * Letters and digits are confused: ``CMIS 2l23``, ``STAT 1O13``, ``5TAT 1113``.
 * The space disappears: ``CMIS2123``.
@@ -35,6 +37,8 @@ from typing import Optional
 DATA_DIR = Path(__file__).resolve().parent / "data"
 
 DAGGER = "†"
+# Canonical marker for year-long modules in API output: the '+' printed in timetables.
+YEAR_LONG_MARK = "+"
 # Characters OCR / text extraction produces for the dagger in the semester slot.
 DAGGER_LOOKALIKES = set("+ᵻ‡⁺✝ł†tT*")
 # OCR letter -> digit confusions, used only inside the 4-character number part.
@@ -55,7 +59,7 @@ SUBJECT_NAMES = {
 }
 KNOWN_PREFIXES = frozenset(SUBJECT_NAMES)
 
-CANONICAL_CODE_RE = re.compile(r"^[A-Z]{4} [1-4][12†]\d{2}$")
+CANONICAL_CODE_RE = re.compile(r"^[A-Z]{4} [1-4][12+]\d{2}$")
 # The English Language Proficiency Course has no numeric module code in the tracker
 # or the academic-flow document; it is identified by level (paired with ELPT I / II).
 ELPC_BY_LEVEL = {"1": "ELPC I", "2": "ELPC II"}
@@ -123,10 +127,16 @@ class ModuleMatch:
 
 
 def _timetable_codes(entry: dict) -> list[str]:
-    """Explicit timetable_codes, else the printed form of a year-long code ('†' prints as '+')."""
+    """Explicit timetable_codes, else the printed form of a year-long code ('CMIS 4+18')."""
     if entry.get("timetable_codes"):
         return list(entry["timetable_codes"])
-    return [entry["code"].replace(DAGGER, "+")] if DAGGER in entry["code"] else []
+    code = _canonical(entry["code"])
+    return [code] if YEAR_LONG_MARK in code else []
+
+
+def _canonical(code: str) -> str:
+    """Catalogue sources write year-long codes with '†'; output uses '+'."""
+    return code.replace(DAGGER, YEAR_LONG_MARK)
 
 
 @lru_cache(maxsize=1)
@@ -134,17 +144,17 @@ def load_catalogue() -> dict[str, CatalogueModule]:
     catalogue: dict[str, CatalogueModule] = {}
     tracker = json.loads((DATA_DIR / "module_catalogue.json").read_text(encoding="utf-8"))
     for m in tracker["modules"]:
-        catalogue[m["code"]] = CatalogueModule(
-            code=m["code"], title=m["title"], credits=m["credits"], level=m["level"],
+        catalogue[_canonical(m["code"])] = CatalogueModule(
+            code=_canonical(m["code"]), title=m["title"], credits=m["credits"], level=m["level"],
             semester=m["semester"], subject=m["subject"], source=m.get("source", "tracker"),
             timetable_codes=_timetable_codes(m),
         )
     overrides = json.loads((DATA_DIR / "module_overrides.json").read_text(encoding="utf-8"))
     for m in overrides["modules"]:
-        if m["code"] in catalogue:
+        if _canonical(m["code"]) in catalogue:
             continue  # the tracker wins over curated guesses
-        catalogue[m["code"]] = CatalogueModule(
-            code=m["code"], title=m.get("title"), credits=m.get("credits"), level=m.get("level"),
+        catalogue[_canonical(m["code"])] = CatalogueModule(
+            code=_canonical(m["code"]), title=m.get("title"), credits=m.get("credits"), level=m.get("level"),
             semester=m.get("semester"), subject=m["subject"], non_credit=m.get("non_credit", False),
             confirmed=m.get("confirmed", False), source="module-code-review.md",
             timetable_codes=_timetable_codes(m),
@@ -207,9 +217,9 @@ def _repair_body(body: str, notes: list[str]) -> Optional[str]:
         if ch.isdigit():
             continue
         if i == 1 and ch in DAGGER_LOOKALIKES:
-            if ch != DAGGER:
-                notes.append(f"'{ch}' in the semester position read as '†' (year-long module)")
-            chars[i] = DAGGER
+            if ch != YEAR_LONG_MARK:
+                notes.append(f"'{ch}' in the semester position read as '+' (year-long module)")
+            chars[i] = YEAR_LONG_MARK
             continue
         if ch in DIGIT_LOOKALIKES:
             notes.append(f"'{ch}' read as '{DIGIT_LOOKALIKES[ch]}'")
@@ -219,7 +229,7 @@ def _repair_body(body: str, notes: list[str]) -> Optional[str]:
     out = "".join(chars)
     if out[0] not in "1234":
         return None
-    if out[1] not in "12" + DAGGER:
+    if out[1] not in "12" + YEAR_LONG_MARK:
         return None
     return out
 
@@ -288,8 +298,8 @@ def match_module_code(raw: Optional[str]) -> ModuleMatch:
         return ModuleMatch(raw=raw, code=named["name"], status="named_course", confidence=1.0,
                            notes=["non-credit course" if named.get("non_credit") else "named course"])
 
-    if text.upper() in catalogue:
-        code = text.upper()
+    if _canonical(text.upper()) in catalogue:
+        code = _canonical(text.upper())
         return ModuleMatch(raw=raw, code=code, status="exact" if code == text else "normalized",
                            confidence=1.0, module=catalogue[code])
 
@@ -346,5 +356,5 @@ def is_named_course(text: Optional[str]) -> bool:
 
 
 def is_valid_module_code(code: Optional[str]) -> bool:
-    """A canonical numeric code (CMIS 4142, CMIS 4†18) or a catalogue / named-course identifier (ELPC I)."""
+    """A canonical numeric code (CMIS 4142, CMIS 4+18) or a catalogue / named-course identifier (ELPC I)."""
     return bool(code) and (bool(CANONICAL_CODE_RE.fullmatch(code)) or code in load_catalogue() or is_named_course(code))
